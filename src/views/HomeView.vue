@@ -9,7 +9,8 @@
                     <div class="ball">
                         <div class="ball__button"></div>
                         <div class="ball_text">
-                            <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png" alt="GUESS THAT POKEMON">
+                            <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png"
+                                alt="GUESS THAT POKEMON">
                         </div>
                     </div>
                 </Router-link>
@@ -47,17 +48,6 @@
     width: 500px;
 }
 
-.ball {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background-image: -webkit-radial-gradient(60% 40%, circle, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%),
-        -webkit-linear-gradient(-90deg, #D00 45%, #333 45%, #333 55%, #FFF 55%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .ball__button {
     height: 30px;
     width: 30px;
@@ -69,29 +59,54 @@
     box-shadow: 0 0 0 5px #fff, 0 0 0 12px #333;
 }
 
+.ball {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-image: -webkit-radial-gradient(60% 40%, circle, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%),
+        -webkit-linear-gradient(-90deg, #D00 45%, #333 45%, #333 55%, #FFF 55%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .ball_text {
     position: absolute;
-    visibility: hidden;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
     height: 0%;
+    transition: height 0.2s ease-in;
 }
-.ball_text_img{
+
+.ball_text_img {
     height: 100%;
 }
-.ball:hover{
+
+.ball:hover {
     animation: shake .3s;
     animation-iteration-count: infinite;
 }
-.ball:hover > .ball_text {
-    visibility: visible;
+
+.ball:hover>.ball_text {
+    height: 50%;
     transition: height 0.4s ease-in;
-    height: 75%;
 }
+
+.ball:hover>.ball_text {
+    height: 50%;
+    transition: height 0.4s ease-in;
+}
+
 @keyframes shake {
-    0%, 100% {
+
+    0%,
+    100% {
         rotate: -10deg;
     }
+
     50% {
         rotate: 10deg;
     }
-}
-</style>
+}</style>
