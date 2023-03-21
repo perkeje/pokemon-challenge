@@ -1,43 +1,20 @@
 <template>
-    <div class="home-wrapper">
-        <div class="home-inner">
-            <div class="home-content">
-                <div class="title-container">
-                    <img class="pokemon-title" src="../assets/images/pokemon-text.png" alt="Pokemon">
-                </div>
-                <Router-link to="/play" class="ball__link">
-                    <div class="ball">
-                        <div class="ball__button"></div>
-                        <div class="ball_text">
-                            <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png"
-                                alt="GUESS THAT POKEMON">
-                        </div>
-                    </div>
-                </Router-link>
-            </div>
+    <div class="home-content">
+        <div class="title-container">
+            <img class="pokemon-title" src="../assets/images/pokemon-text.png" alt="Pokemon">
         </div>
+        <Router-link to="/play" class="ball__link">
+            <div class="ball">
+                <div class="ball__button"></div>
+                <div class="ball_text">
+                    <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png" alt="GUESS THAT POKEMON">
+                </div>
+            </div>
+        </Router-link>
     </div>
 </template>
 
 <style>
-.home-wrapper {
-    background-repeat: no-repeat;
-    background-image: url('../assets/images/Pokémon-wallpapers-5.jpg');
-    background-size: cover;
-    background-position: 50%;
-    height: 100vh;
-    width: 100%;
-}
-
-.home-inner {
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .home-content {
     display: flex;
     flex-direction: column;
@@ -109,4 +86,5 @@
     50% {
         rotate: 10deg;
     }
-}</style>
+}
+</style>
