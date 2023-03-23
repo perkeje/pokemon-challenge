@@ -1,23 +1,38 @@
 <template>
     <div class="play-content">
         <div class="play-container">
-            <div class="poke-img-holder">
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Pokemon">
+            <div class="poke-img-holder" :style="{'-webkit-mask-image': `url(${ randomPokemonImg })`, 'mask-image': `url(${ randomPokemonImg })`}">
+                <Transition name="appear">    
+                    <img :src="randomPokemonImg" alt="Pokemon" v-if="isGuessed">
+                </Transition>
             </div>
             <div class="guess">
                 <input class="guess-input" type="text">
-                <button class="guess-btn">Guess</button>
+                <button class="guess-btn" @click="() => isGuessed = !isGuessed">Guess</button>
             </div>
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import { usePokemonStore } from '@/stores';
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+export default {
+    setup() {
+        const isGuessed = ref(false)
+        const pokemonStore = usePokemonStore()
+        const { randomPokemonId, randomPokemonImg } = storeToRefs(pokemonStore)
 
+        pokemonStore.getRandomPokemonIdAndPic()
+        
+        return { randomPokemonImg, isGuessed}
+    }
+}
 </script>
 
 <style scoped>
-.play-content{
+.play-content {
     position: absolute;
     background-color: var(--secondary-color);
     height: 500px;
@@ -25,6 +40,7 @@
     border-radius: 25px;
     padding: 10px 0px;
 }
+
 .play-container {
     height: 100%;
     width: 100%;
@@ -33,21 +49,21 @@
     align-items: center;
     flex-direction: column;
 }
+
 .poke-img-holder {
-    height:70%;
+    height: 70%;
     width: 70%;
     background-color: black;
-    -webkit-mask-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png");
     -webkit-mask-position: center;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
-    mask-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png");
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
     display: flex;
     justify-content: center;
 }
+
 .guess {
     height: 30%;
     width: 100%;
@@ -56,7 +72,8 @@
     justify-content: space-evenly;
     align-items: center;
 }
-.guess-input{
+
+.guess-input {
     height: 30%;
     width: 40%;
     border-color: var(--primary-color);
@@ -65,12 +82,14 @@
     font-size: 1.3em;
     text-align: center;
 }
-.guess-input:focus{
+
+.guess-input:focus {
     outline: none;
     border-color: var(--primary-color);
     border-width: 1.5px;
 }
-.guess-btn{
+
+.guess-btn {
     height: 30%;
     width: 30%;
     border-radius: 15px;
@@ -80,4 +99,15 @@
     color: var(--secondary-color);
     font-size: 1.3em;
 }
+
+.appear-enter-active,
+.appear-leave-active {
+    transition: opacity 0.3s ease-in;
+}
+
+.appear-enter-from,
+.appear-leave-to {
+    opacity: 0;
+}
+
 </style>
