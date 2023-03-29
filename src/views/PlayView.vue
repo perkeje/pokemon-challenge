@@ -1,34 +1,78 @@
 <template>
     <div class="play-content">
-        <div class="play-container">
-            <div class="poke-img-holder" :style="{'-webkit-mask-image': `url(${ randomPokemonImg })`, 'mask-image': `url(${ randomPokemonImg })`}">
-                <Transition name="appear">    
+        <Toast v-if="isCorrect && !isGuessed" title="Correct!" :message="pokemon.toUpperCase() + ' added to Pokedex'" :duration="3000"/>
+        <label for="guess-input">
+            <div class="play-container">
+                <div class="poke-img-holder"
+                    :style="{ '-webkit-mask-image': `url(${randomPokemonImg})`, 'mask-image': `url(${randomPokemonImg})` }">
                     <img :src="randomPokemonImg" alt="Pokemon" v-if="isGuessed">
-                </Transition>
+                </div>
+                <div class="guess" v-if="!isGuessed">
+                    <input class="guess-input" id="guess-input" type="text" @keydown.enter="guess" v-model="userGuess"
+                        placeholder="Who's that pokemon?">
+                    <button class="guess-btn" @click="guess">Guess</button>
+                </div>
+                <div class="next" v-if="isGuessed">
+                    <div class="pokemon-text">
+                        <p>{{ pokemon }}</p>
+                        <el-icon :size="40">
+                            <CloseBold v-if="!isCorrect" style="color: var(--error)" />
+                            <Select v-if="isCorrect" style="color: var(--success)" />
+                        </el-icon>
+                    </div>
+                    <button class="next-btn" @click="newPokemon">Next</button>
+                </div>
             </div>
-            <div class="guess">
-                <input class="guess-input" type="text">
-                <button class="guess-btn" @click="() => isGuessed = !isGuessed">Guess</button>
-            </div>
-        </div>
+        </label>
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-export default {
-    setup() {
-        const isGuessed = ref(false)
-        const pokemonStore = usePokemonStore()
-        const { randomPokemonId, randomPokemonImg } = storeToRefs(pokemonStore)
+import { Select, CloseBold } from '@element-plus/icons-vue'
+import Toast from '@/components/Toast.vue';
 
-        pokemonStore.getRandomPokemonIdAndPic()
-        
-        return { randomPokemonImg, isGuessed}
-    }
+const isGuessed = ref(false)
+const userGuess = ref("")
+const isCorrect = ref(false)
+const randomPokemonImg = ref("")
+const pokemonStore = usePokemonStore()
+const { pokemonPictureUrl } = storeToRefs(pokemonStore)
+const pokemon = ref("")
+let id = 0
+
+const newPokemon = () => {
+    isGuessed.value = false
+    id = pokemonStore.getRandomPokemonId()
+    randomPokemonImg.value = `${pokemonPictureUrl.value}/${id}.png`
 }
+
+const guess = async () => {
+    if (userGuess.value === "") {
+        alert("You have to enter Pokemon name");
+        return
+    }
+    if (!isGuessed) return
+
+    pokemon.value = await pokemonStore.getPokemonName(id);
+    isGuessed.value = !isGuessed.value
+
+    if (pokemon?.value != undefined) {
+        if (pokemon?.value === userGuess.value.toLowerCase()) {
+            isCorrect.value = true
+            pokemonStore.storeToPokedex(id)
+        }
+        else {
+            isCorrect.value = false
+        }
+    }
+    userGuess.value = ""
+}
+newPokemon()
+
+
 </script>
 
 <style scoped>
@@ -64,13 +108,64 @@ export default {
     justify-content: center;
 }
 
-.guess {
+.guess,
+.next {
     height: 30%;
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.pokemon-text p {
+    animation: grow 0.8s ease-in;
+    overflow: hidden;
+    font-size: 2em;
+    font-weight: 300;
+    text-transform: capitalize;
+    text-align: center;
+    height: 100%;
+}
+
+.pokemon-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30%;
+}
+
+.el-icon {
+    height: 100%;
+    align-items: end;
+    animation: opacity 0.5s ease-in 0.8s;
+    overflow: hidden;
+    animation-fill-mode: backwards;
+}
+
+@keyframes grow {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.poke-img-holder img {
+    animation: opacity 0.5s ease-in;
+    overflow: hidden;
+}
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .guess-input {
@@ -89,6 +184,7 @@ export default {
     border-width: 1.5px;
 }
 
+.next-btn,
 .guess-btn {
     height: 30%;
     width: 30%;
@@ -99,15 +195,4 @@ export default {
     color: var(--secondary-color);
     font-size: 1.3em;
 }
-
-.appear-enter-active,
-.appear-leave-active {
-    transition: opacity 0.3s ease-in;
-}
-
-.appear-enter-from,
-.appear-leave-to {
-    opacity: 0;
-}
-
 </style>
