@@ -1,26 +1,20 @@
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import Navbar from './components/layouts/Navbar.vue';
 
-export default{
-  components: { Navbar },
-  setup(){
-    const wallpapers = ['./src/assets/images/wallpaperbetter.jpg', './src/assets/images/wallpaperbetter1.jpg' , './src/assets/images/wallpaperbetter2.jpg', './src/assets/images/wallpaperbetter3.jpg', './src/assets/images/wallpaperbetter4.jpg' , './src/assets/images/wallpaperbetter5.jpg' ]
-    const backgroundImg = ref(wallpapers[0])
-    let index = 0
+  const wallpapers = ['./src/assets/images/wallpaperbetter.jpg', './src/assets/images/wallpaperbetter1.jpg' , './src/assets/images/wallpaperbetter2.jpg', './src/assets/images/wallpaperbetter3.jpg', './src/assets/images/wallpaperbetter4.jpg' , './src/assets/images/wallpaperbetter5.jpg' ]
+  const backgroundImg = ref(wallpapers[0])
+  let index = 0
 
-    const changeBackground = () => {
-      index = (index+ 1) % wallpapers.length;
-      backgroundImg.value = wallpapers[index];
-      setTimeout(() => changeBackground(), 10000);
-    }
-    
-    setTimeout(() => changeBackground(), 10000);
-
-    return {backgroundImg}
+  const changeBackground = () => {
+    index = (index+ 1) % wallpapers.length;
+    backgroundImg.value = wallpapers[index];
+    setTimeout(() => changeBackground(), 20000);
   }
-}
+  
+  setTimeout(() => changeBackground(), 20000);
+
 </script>
 
 <template>

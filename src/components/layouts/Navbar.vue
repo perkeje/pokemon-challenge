@@ -22,7 +22,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .nav {
     background-color: var(--secondary-color);
     opacity: 0.85;
