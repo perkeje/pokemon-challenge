@@ -7,10 +7,13 @@
                 </RouterLink>
             </div>
             <div class="nav_inner-right">
-                <RouterLink to="/">
-                    <button class="pokedex-btn">
-                        Pokedex
-                    </button>
+                <RouterLink :to="{ name: 'pokedex' }">
+                    <div class="pokedex-link" @mouseenter="isTooltipVisible = true" @mouseleave="isTooltipVisible = false">
+                        <button class="pokedex-btn">
+                            Pokedex
+                        </button>
+                        <Tooltip :is-tooltip-visible="isTooltipVisible"></Tooltip>
+                    </div>
                 </RouterLink>
             </div>
         </div>
@@ -19,15 +22,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import Tooltip from '../Tooltip.vue';
+const isTooltipVisible = ref(false)
 
 </script>
 
 <style scoped>
 .nav {
     background-color: var(--secondary-color);
-    opacity: 0.85;
+    opacity: 0.9;
     padding: 10px 50px;
-    position: fixed;
+    position: absolute;
     top: 10px;
     left: 10px;
     right: 10px;
@@ -54,6 +60,11 @@
 
 .pokeball-logo {
     height: 100%;
+}
+
+.pokedex-link {
+    position: relative;
+    height: fit-content;
 }
 
 .pokedex-btn {
