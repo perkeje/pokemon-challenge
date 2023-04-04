@@ -15,7 +15,7 @@ export const usePokemonStore = defineStore('pokemon', {
   state: (): PokemonState => ({
     maxPokemons: 151,
     totalPages: Math.floor(151 / 20) + 1,
-    isLoading: false,
+    isLoading: true,
     pokemonApiUrl: 'https://pokeapi.co/api/v2/pokemon/',
     pokemonPictureUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/',
     pokedex: new Set<number>()

@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import Pokemon from '@/components/Pokemon.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
+import Loading from '@/components/Loading.vue';
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
@@ -24,7 +25,9 @@ onMounted(async () => {
 
 <template>
     <div class="pokedex-wrapper">
-        <div v-if="isLoading">Loading...</div>
+        <div class="loading" v-if="isLoading">
+            <Loading></Loading>
+        </div>
         <div v-if="!isLoading" class="pokedex-content">
             <div class="pokedex-pagination">
                 <button @click="async () => await changePage(--currentPage)" :disabled="currentPage === 1">Prev</button>
@@ -51,18 +54,24 @@ onMounted(async () => {
     </div>
 </template>
 
-<style>
+<style scoped>
 .pokedex-wrapper {
     position: relative;
-    top: 95px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
 .pokedex-content {
-    background-color: var(--secondary-color);
-    margin: 50px 100px;
+    background-color: var(--secondary-color); 
+    margin: 145px 100px;
     border-radius: 25px;
     height: fit-content;
     width: 100%;
