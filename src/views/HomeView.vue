@@ -1,20 +1,29 @@
 <template>
-    <div class="home-content">
-        <div class="title-container">
-            <img class="pokemon-title" src="../assets/images/pokemon-text.png" alt="Pokemon">
-        </div>
-        <Router-link to="/play" class="ball__link">
-            <div class="ball">
-                <div class="ball__button"></div>
-                <div class="ball_text">
-                    <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png" alt="GUESS THAT POKEMON">
-                </div>
+    <div class="home-wrapper">
+        <div class="home-content">
+            <div class="title-container">
+                <img class="pokemon-title" src="../assets/images/pokemon-text.png" alt="Pokemon">
             </div>
-        </Router-link>
+            <Router-link to="/play" class="ball__link">
+                <div class="ball">
+                    <div class="ball__button"></div>
+                    <div class="ball_text">
+                        <img class="ball_text_img" src="src/assets/images/pngaaa.com-1906169.png" alt="GUESS THAT POKEMON">
+                    </div>
+                </div>
+            </Router-link>
+        </div>
     </div>
 </template>
 
 <style>
+.home-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .home-content {
     display: flex;
     flex-direction: column;
