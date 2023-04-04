@@ -1,29 +1,36 @@
 <template>
-    <div class="play-content">
-        <Toast v-if="isCorrect && !isGuessed" title="Correct!" :message="pokemon.toUpperCase() + ' added to Pokedex'" :duration="3000"/>
-        <label for="guess-input">
-            <div class="play-container">
-                <div class="poke-img-holder"
-                    :style="{ '-webkit-mask-image': `url(${randomPokemonImg})`, 'mask-image': `url(${randomPokemonImg})` }">
-                    <img :src="randomPokemonImg" alt="Pokemon" v-if="isGuessed">
-                </div>
-                <div class="guess" v-if="!isGuessed">
-                    <input class="guess-input" id="guess-input" type="text" @keydown.enter="guess" v-model="userGuess"
-                        placeholder="Who's that pokemon?">
-                    <button class="guess-btn" @click="guess">Guess</button>
-                </div>
-                <div class="next" v-if="isGuessed">
-                    <div class="pokemon-text">
-                        <p>{{ pokemon }}</p>
-                        <el-icon :size="40">
-                            <CloseBold v-if="!isCorrect" style="color: var(--error)" />
-                            <Select v-if="isCorrect" style="color: var(--success)" />
-                        </el-icon>
+    <div class="play-wrapper">
+        <div class="play-content">
+            <Toast v-if="isCorrect && !isGuessed" title="Correct!" :message="pokemon.toUpperCase() + ' added to Pokedex'"
+                :duration="3000" />
+            <label for="guess-input" v-if="!isWin">
+                <div class="play-container">
+                    <div class="poke-img-holder"
+                        :style="{ '-webkit-mask-image': `url(${randomPokemonImg})`, 'mask-image': `url(${randomPokemonImg})` }">
+                        <img :src="randomPokemonImg" alt="Pokemon" v-if="isGuessed">
                     </div>
-                    <button class="next-btn" @click="newPokemon">Next</button>
+                    <div class="guess" v-if="!isGuessed">
+                        <input class="guess-input" id="guess-input" type="text" @keydown.enter="guess" v-model="userGuess"
+                            placeholder="Who's that pokemon?">
+                        <button class="guess-btn" @click="guess">Guess</button>
+                    </div>
+                    <div class="next" v-if="isGuessed">
+                        <div class="pokemon-text">
+                            <div v-if="isLoading">Loading...</div>
+                            <p v-else>{{ pokemon }}</p>
+                            <el-icon :size="40">
+                                <CloseBold v-if="!isCorrect" style="color: var(--error)" />
+                                <Select v-if="isCorrect" style="color: var(--success)" />
+                            </el-icon>
+                        </div>
+                        <button class="next-btn" @click="newPokemon">Next</button>
+                    </div>
                 </div>
+            </label>
+            <div v-else>
+                You won
             </div>
-        </label>
+        </div>
     </div>
 </template>
 
@@ -39,16 +46,21 @@ const userGuess = ref("")
 const isCorrect = ref(false)
 const randomPokemonImg = ref("")
 const pokemonStore = usePokemonStore()
-const { pokemonPictureUrl } = storeToRefs(pokemonStore)
+const { pokemonPictureUrl, isLoading, pokedex, maxPokemons } = storeToRefs(pokemonStore)
 const pokemon = ref("")
+const isWin = ref(false)
 let id = 0
 
 const newPokemon = () => {
+    if (checkPokedex()) return
     isGuessed.value = false
     id = pokemonStore.getRandomPokemonId()
-    randomPokemonImg.value = `${pokemonPictureUrl.value}/${id}.png`
+    randomPokemonImg.value = `${pokemonPictureUrl.value}${id}.png`
 }
-
+const checkPokedex = () => {
+    if (pokedex.value.size >= maxPokemons.value) isWin.value = true
+    return isWin.value
+}
 const guess = async () => {
     if (userGuess.value === "") {
         alert("You have to enter Pokemon name");
@@ -76,8 +88,14 @@ newPokemon()
 </script>
 
 <style scoped>
+.play-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .play-content {
-    position: absolute;
     background-color: var(--secondary-color);
     height: 500px;
     width: 500px;

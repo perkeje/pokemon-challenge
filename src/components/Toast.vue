@@ -18,7 +18,7 @@ const props = defineProps({
 const visible = ref(false)
 let duration = props.duration
 let start: number
-let remaining:number
+let remaining: number
 let timer: number | undefined
 
 const show = () => {
@@ -49,10 +49,10 @@ show()
 </script>
 
 <template>
-    <div  v-if= "visible" class="toast-container" @mouseenter="onHover" @mouseleave="onMouseLeave">
+    <div v-if="visible" class="toast-container" @mouseenter="onHover" @mouseleave="onMouseLeave">
         <div class="toast-header">
             <el-icon @click="close" :size="25">
-                <CircleCloseFilled/>
+                <CircleCloseFilled />
             </el-icon>
             <p class="toast-title">{{ title }}</p>
         </div>
@@ -65,13 +65,19 @@ show()
 <style scoped>
 .toast-container {
     position: fixed;
-    width: 300px;
-    height: 150px;
+    width: 90vw;
+    /* Use 90% of viewport width */
+    max-width: 350px;
+    /* Set a maximum width */
+    height: auto;
+    /* Allow height to adjust based on content */
     top: 20%;
-    right: 8%;
+    right: 5%;
     opacity: 0.8;
     background-color: var(--secondary-color);
     border-radius: 0px 10px 10px 10px;
+    padding: 10px;
+    z-index: 100;
 }
 
 .toast-container:hover {
@@ -85,9 +91,10 @@ show()
     justify-content: center;
     border-bottom: 0.5px var(--primary-color) solid;
 }
-.toast-header p{
-   margin: 5px 0px;
-   font-size: 1.5em;
+
+.toast-header p {
+    margin: 5px 0px;
+    font-size: 1.5em;
 }
 
 .toast-body {
@@ -109,5 +116,4 @@ show()
     translate: -30% -30%;
     color: var(--primary-color);
     cursor: pointer;
-}
-</style>
+}</style>
