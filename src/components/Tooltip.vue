@@ -3,7 +3,7 @@ import Pokemon from './Pokemon.vue';
 import ProgressBar from './ProgressBar.vue';
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     isTooltipVisible: {
@@ -14,20 +14,26 @@ const props = defineProps({
 const pokemonStore = usePokemonStore()
 const { maxPokemons, pokedex, pokemonPictureUrl } = storeToRefs(pokemonStore)
 
-let progress = ref(Math.floor(pokedex.value.size / maxPokemons.value * 100))
+let progress = computed(() => Math.floor(pokedex.value.size / maxPokemons.value * 100))
 
-const lastPokemon = Array.from(pokedex.value).pop();
+const lastPokemon = computed(() => (Array.from(pokedex.value).pop()))
 
 </script>
 
 <template>
     <div class="tooltip" v-show="props.isTooltipVisible">
-        <p>Lastly added</p>
-        <div class="img-container">
-            <img :src="pokemonPictureUrl + lastPokemon + '.png'" alt="Pokemon">
+        <div class="display" v-if="pokedex.size > 0">
+            <p>Lastly guessed</p>
+            <div class="img-container">
+                <img :src="pokemonPictureUrl + lastPokemon + '.png'" alt="Pokemon">
+            </div>
+            <div class="progress-container">
+                <ProgressBar :progress="progress"></ProgressBar>
+            </div>
         </div>
-        <div class="progress-container">
-            <ProgressBar :progress="progress"></ProgressBar>
+        <div class="no-pokemons" v-else>
+            <p>You don't have any Pokemons guessed yet!</p>
+            <p>Here will be displayed your last guessed Pokemon.</p>
         </div>
     </div>
 </template>
@@ -38,10 +44,6 @@ const lastPokemon = Array.from(pokedex.value).pop();
     position: absolute;
     height: 200px;
     width: 200px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
     background-color: var(--secondary-color);
     color: var(--primary-color);
     padding: 5px;
@@ -79,6 +81,15 @@ const lastPokemon = Array.from(pokedex.value).pop();
     height: 3%;
 }
 
+.display {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
 .img-container {
     height: 50%;
 }
@@ -90,4 +101,18 @@ const lastPokemon = Array.from(pokedex.value).pop();
 .tooltip p {
     font-size: 1.2em;
     margin: 0;
-}</style>
+}
+
+.no-pokemons {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
+.no-pokemons p {
+    text-align: center;
+}
+</style>
