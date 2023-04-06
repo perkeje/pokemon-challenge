@@ -31,7 +31,7 @@ const isTooltipVisible = ref(false)
 <style scoped>
 .nav {
     background-color: var(--secondary-color);
-    opacity: 0.9;
+    opacity: 0.75;
     padding: 10px 50px;
     position: absolute;
     top: 10px;
