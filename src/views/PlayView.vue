@@ -27,8 +27,8 @@
                     </div>
                 </div>
             </label>
-            <div v-else>
-                You won
+            <div class="winning-container" v-else>
+                <Winning />
             </div>
         </div>
     </div>
@@ -40,6 +40,7 @@ import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import { Select, CloseBold } from '@element-plus/icons-vue'
 import Toast from '@/components/Toast.vue';
+import Winning from '@/components/Winning.vue';
 
 const isGuessed = ref(false)
 const userGuess = ref("")
@@ -212,5 +213,10 @@ newPokemon()
     background-color: var(--primary-color);
     color: var(--secondary-color);
     font-size: 1.3em;
+}
+
+.winning-container {
+    height: 100%;
+    width: 100%;
 }
 </style>
