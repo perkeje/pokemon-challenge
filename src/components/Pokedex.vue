@@ -24,57 +24,45 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="pokedex-wrapper">
-        <div class="loading" v-if="isLoading">
-            <Loading></Loading>
+    <div class="loading" v-if="isLoading">
+        <Loading></Loading>
+    </div>
+    <div class="pokedex-container" v-if="!isLoading">
+        <div class="pokedex-pagination">
+            <button @click="async () => await changePage(--currentPage)" :disabled="currentPage === 1">Prev</button>
+            <button v-for="page in totalPages" :key="page" :class="{ active_btn: currentPage === page }"
+                @click="async () => await changePage(page)">{{ page }}</button>
+            <button @click="async () => await changePage(++currentPage)"
+                :disabled="currentPage === totalPages">Next</button>
         </div>
-        <div v-if="!isLoading" class="pokedex-content">
-            <div class="pokedex-pagination">
-                <button @click="async () => await changePage(--currentPage)" :disabled="currentPage === 1">Prev</button>
-                <button v-for="page in totalPages" :key="page" :class="{ active_btn: currentPage === page }"
-                    @click="async () => await changePage(page)">{{ page }}</button>
-                <button @click="async () => await changePage(++currentPage)"
-                    :disabled="currentPage === totalPages">Next</button>
+        <div class="progress">
+            <div class="progress-percentage">
+                <p>{{ progress }}%</p>
             </div>
-            <div class="progress">
-                <div class="progress-percentage">
-                    <p>{{ progress }}%</p>
-                </div>
-                <div class="progress-bar">
-                    <ProgressBar :progress=progress></ProgressBar>
-                </div>
+            <div class="progress-bar">
+                <ProgressBar :progress=progress></ProgressBar>
             </div>
-            <div class="pokedex-grid">
-                <div class="pokemon-holder" v-for="pokemon in pokemons">
-                    <Pokemon :pokemon-img="pokemon.img" :display="pokemon.name === '???' ? false : true" />
-                    <p>{{ pokemon.name }}</p>
-                </div>
+        </div>
+        <div class="pokedex-grid">
+            <div class="pokemon-holder" v-for="pokemon in pokemons">
+                <Pokemon :pokemon-img="pokemon.img" :display="pokemon.name === '???' ? false : true" />
+                <p>{{ pokemon.name }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.pokedex-wrapper {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-}
-
 .loading {
+    left: 50%;
+    translate: -50%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-}
-
-.pokedex-content {
-    background-color: var(--secondary-color); 
-    margin: 145px 100px;
-    border-radius: 25px;
-    height: fit-content;
-    width: 100%;
+    height: 100%;
+    width: 50%;
+    position: relative;
 }
 
 .pokedex-grid {
@@ -82,6 +70,7 @@ onMounted(async () => {
     height: 100%;
     width: 100%;
     margin: 50px 0;
+    scroll-behavior: smooth;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
@@ -105,7 +94,7 @@ onMounted(async () => {
     grid-template-columns: repeat(auto-fit, 60px);
     align-items: center;
     grid-gap: 5px;
-    margin: 50px 20px;
+    margin-bottom: 30px;
 }
 
 .pokedex-pagination button {
@@ -162,5 +151,6 @@ button:disabled {
 
 .progress-percentage p {
     margin: 0 0 5px 0;
-}</style>
+}
+</style>
 

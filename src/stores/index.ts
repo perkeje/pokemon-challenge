@@ -8,7 +8,8 @@ type PokemonState = {
   isLoading: boolean,
   pokemonApiUrl: string
   pokemonPictureUrl: string,
-  pokedex: Set<number>
+  pokedex: Set<number>,
+  pokedexModal: boolean
 }
 
 export const usePokemonStore = defineStore('pokemon', {
@@ -18,7 +19,8 @@ export const usePokemonStore = defineStore('pokemon', {
     isLoading: true,
     pokemonApiUrl: 'https://pokeapi.co/api/v2/pokemon/',
     pokemonPictureUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/',
-    pokedex: new Set<number>()
+    pokedex: new Set<number>(),
+    pokedexModal: false
   }),
   actions: {
     getRandomPokemonId() {
@@ -34,7 +36,6 @@ export const usePokemonStore = defineStore('pokemon', {
         const request = await fetch(this.pokemonApiUrl + id)
         const response = await request.json()
         const pokemon = response.forms[0].name
-        this.isLoading = false
         return pokemon
       } catch {
 

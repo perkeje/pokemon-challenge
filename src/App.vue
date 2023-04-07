@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { RouterView } from 'vue-router'
+import { usePokemonStore } from '@/stores';
+import { storeToRefs } from 'pinia';
 import Navbar from './components/layouts/Navbar.vue';
+import Modal from './components/Modal.vue';
+import Pokedex from './components/Pokedex.vue';
+
+const pokemonStore = usePokemonStore()
+// const { pokedexModal } = storeToRefs(pokemonStore)
 
 const wallpapers = ['./src/assets/images/wallpaperbetter.jpg', './src/assets/images/wallpaperbetter1.jpg', './src/assets/images/wallpaperbetter2.jpg', './src/assets/images/wallpaperbetter3.jpg', './src/assets/images/wallpaperbetter4.jpg', './src/assets/images/wallpaperbetter5.jpg']
 const backgroundImg = ref(wallpapers[0])
@@ -24,6 +31,9 @@ setTimeout(() => changeBackground(), 20000);
   </div>
   <Navbar />
   <RouterView />
+  <Modal>
+    <Pokedex />
+  </Modal>
 </template>
 
 <style scoped>

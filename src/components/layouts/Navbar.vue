@@ -7,14 +7,12 @@
                 </RouterLink>
             </div>
             <div class="nav_inner-right">
-                <RouterLink :to="{ name: 'pokedex' }">
-                    <div class="pokedex-link" @mouseenter="isTooltipVisible = true" @mouseleave="isTooltipVisible = false">
-                        <button class="pokedex-btn">
-                            Pokedex
-                        </button>
-                        <Tooltip :is-tooltip-visible="isTooltipVisible"></Tooltip>
-                    </div>
-                </RouterLink>
+                <div class="pokedex-link" @mouseenter="isTooltipVisible = true" @mouseleave="isTooltipVisible = false">
+                    <button class="pokedex-btn" @click="pokedexModal = true">
+                        Pokedex
+                    </button>
+                    <Tooltip :is-tooltip-visible="isTooltipVisible"></Tooltip>
+                </div>
             </div>
         </div>
 
@@ -24,8 +22,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Tooltip from '../Tooltip.vue';
+import { usePokemonStore } from '@/stores';
+import { storeToRefs } from 'pinia';
 const isTooltipVisible = ref(false)
 
+const pokemonStore = usePokemonStore()
+const { pokedexModal } = storeToRefs(pokemonStore)
 </script>
 
 <style scoped>
@@ -37,7 +39,6 @@ const isTooltipVisible = ref(false)
     top: 10px;
     left: 10px;
     right: 10px;
-    z-index: 1000;
     border-radius: 25px;
 }
 
