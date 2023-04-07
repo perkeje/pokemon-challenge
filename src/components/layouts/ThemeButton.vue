@@ -55,15 +55,13 @@ watch(theme, () => {
 .theme-btn {
     height: 100%;
     width: 100%;
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     cursor: pointer;
     border-radius: 100%;
-    border-width: 1px;
-    border-style: ridge;
-    border-color: var(--primary-color);
+    border-style: hidden;
 }
 
 .el-icon {
-    color: var(--primary-color);
+    color: var(--secondary-color);
 }
 </style>
