@@ -16,8 +16,7 @@
                     </div>
                     <div class="next" v-if="isGuessed">
                         <div class="pokemon-text">
-                            <div v-if="isLoading">Loading...</div>
-                            <p v-else>{{ pokemon }}</p>
+                            <p>{{ pokemon }}</p>
                             <el-icon :size="40">
                                 <CloseBold v-if="!isCorrect" style="color: var(--error)" />
                                 <Select v-if="isCorrect" style="color: var(--success)" />

@@ -16,7 +16,7 @@ export const usePokemonStore = defineStore('pokemon', {
   state: (): PokemonState => ({
     maxPokemons: 151,
     totalPages: Math.floor(151 / 20) + 1,
-    isLoading: true,
+    isLoading: false,
     pokemonApiUrl: 'https://pokeapi.co/api/v2/pokemon/',
     pokemonPictureUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/',
     pokedex: new Set<number>(),
@@ -32,7 +32,6 @@ export const usePokemonStore = defineStore('pokemon', {
     },
     async getPokemonName(id: number) {
       try {
-        this.isLoading = true
         const request = await fetch(this.pokemonApiUrl + id)
         const response = await request.json()
         const pokemon = response.forms[0].name
