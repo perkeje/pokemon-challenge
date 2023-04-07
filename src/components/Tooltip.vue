@@ -3,7 +3,6 @@ import Pokemon from './Pokemon.vue';
 import ProgressBar from './ProgressBar.vue';
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
 
 const props = defineProps({
     isTooltipVisible: {
@@ -12,11 +11,7 @@ const props = defineProps({
     }
 })
 const pokemonStore = usePokemonStore()
-const { maxPokemons, pokedex, pokemonPictureUrl } = storeToRefs(pokemonStore)
-
-let progress = computed(() => Math.floor(pokedex.value.size / maxPokemons.value * 100))
-
-const lastPokemon = computed(() => (Array.from(pokedex.value).pop()))
+const { pokedex, pokemonPictureUrl } = storeToRefs(pokemonStore)
 
 </script>
 
@@ -25,10 +20,10 @@ const lastPokemon = computed(() => (Array.from(pokedex.value).pop()))
         <div class="display" v-if="pokedex.size > 0">
             <p>Lastly guessed</p>
             <div class="img-container">
-                <img :src="pokemonPictureUrl + lastPokemon + '.png'" alt="Pokemon">
+                <img :src="pokemonPictureUrl + pokemonStore.getLastAdded + '.png'" alt="Pokemon">
             </div>
             <div class="progress-container">
-                <ProgressBar :progress="progress"></ProgressBar>
+                <ProgressBar :progress="pokemonStore.progress"></ProgressBar>
             </div>
         </div>
         <div class="no-pokemons" v-else>

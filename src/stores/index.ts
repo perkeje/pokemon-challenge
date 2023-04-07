@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 
@@ -24,6 +23,10 @@ export const usePokemonStore = defineStore('pokemon', {
     pokedexModal: false,
     theme: 'light'
   }),
+  getters:{
+    getLastAdded: (state) => (Array.from(state.pokedex).pop()),
+    progress: (state) => Math.floor(state.pokedex.size / state.maxPokemons * 100)
+  },
   actions: {
     getRandomPokemonId() {
       let id: number
