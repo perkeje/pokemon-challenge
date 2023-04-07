@@ -20,12 +20,10 @@ const updateThemeClass = () => {
     }
 };
 
-// Update the theme class on component mount
 onMounted(() => {
     updateThemeClass();
 });
 
-// Update the theme class whenever the theme value changes
 watch(theme, () => {
     updateThemeClass();
 });
@@ -45,8 +43,8 @@ watch(theme, () => {
 <style>
 .theme-btn-container {
     position: fixed;
-    bottom: 80px;
-    right: 60px;
+    bottom: 10%;
+    right: 5%;
     height: 50px;
     width: 50px;
     border-radius: 100%;
@@ -60,7 +58,9 @@ watch(theme, () => {
     background-color: var(--secondary-color);
     cursor: pointer;
     border-radius: 100%;
-    border-style: hidden;
+    border-width: 1px;
+    border-style: ridge;
+    border-color: var(--primary-color);
 }
 
 .el-icon {

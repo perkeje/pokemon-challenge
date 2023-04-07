@@ -66,11 +66,8 @@ show()
 .toast-container {
     position: fixed;
     width: 90vw;
-    /* Use 90% of viewport width */
-    max-width: 350px;
-    /* Set a maximum width */
+    max-width: 300px;
     height: auto;
-    /* Allow height to adjust based on content */
     top: 20%;
     right: 5%;
     opacity: 0.8;

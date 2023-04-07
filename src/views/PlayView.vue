@@ -98,7 +98,8 @@ newPokemon()
 .play-content {
     background-color: var(--secondary-color);
     height: 500px;
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
     border-radius: 25px;
     padding: 10px 0px;
 }

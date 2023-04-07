@@ -28,13 +28,6 @@ onMounted(async () => {
         <Loading></Loading>
     </div>
     <div class="pokedex-container" v-if="!isLoading">
-        <div class="pokedex-pagination">
-            <button @click="async () => await changePage(--currentPage)" :disabled="currentPage === 1">Prev</button>
-            <button v-for="page in totalPages" :key="page" :class="{ active_btn: currentPage === page }"
-                @click="async () => await changePage(page)">{{ page }}</button>
-            <button @click="async () => await changePage(++currentPage)"
-                :disabled="currentPage === totalPages">Next</button>
-        </div>
         <div class="progress">
             <div class="progress-percentage">
                 <p>{{ progress }}%</p>
@@ -48,6 +41,14 @@ onMounted(async () => {
                 <Pokemon :pokemon-img="pokemon.img" :display="pokemon.name === '???' ? false : true" />
                 <p>{{ pokemon.name }}</p>
             </div>
+        </div>
+
+        <div class="pokedex-pagination">
+            <button @click="async () => await changePage(--currentPage)" :disabled="currentPage === 1">Prev</button>
+            <button v-for="page in totalPages" :key="page" :class="{ active_btn: currentPage === page }"
+                @click="async () => await changePage(page)">{{ page }}</button>
+            <button @click="async () => await changePage(++currentPage)"
+                :disabled="currentPage === totalPages">Next</button>
         </div>
     </div>
 </template>

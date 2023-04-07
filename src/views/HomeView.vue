@@ -34,7 +34,8 @@ import Pokeball from '@/components/Pokeball.vue';
 }
 
 .pokemon-title {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .ball_text {
