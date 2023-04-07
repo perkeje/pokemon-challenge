@@ -189,4 +189,14 @@ newPokemon()
     height: 100%;
     width: 100%;
 }
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 </style>
