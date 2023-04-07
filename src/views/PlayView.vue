@@ -5,10 +5,7 @@
                 :duration="3000" />
             <label for="guess-input" v-if="!isWin">
                 <div class="play-container">
-                    <div class="poke-img-holder"
-                        :style="{ '-webkit-mask-image': `url(${randomPokemonImg})`, 'mask-image': `url(${randomPokemonImg})` }">
-                        <img :src="randomPokemonImg" alt="Pokemon" v-if="isGuessed">
-                    </div>
+                    <Pokemon :display="isGuessed" :pokemon-img="randomPokemonImg" />
                     <div class="guess" v-if="!isGuessed">
                         <input class="guess-input" id="guess-input" type="text" @keydown.enter="guess" v-model="userGuess"
                             placeholder="Who's that pokemon?">
@@ -40,6 +37,7 @@ import { ref } from 'vue';
 import { Select, CloseBold } from '@element-plus/icons-vue'
 import Toast from '@/components/Toast.vue';
 import Winning from '@/components/Winning.vue';
+import Pokemon from '@/components/Pokemon.vue';
 
 const isGuessed = ref(false)
 const userGuess = ref("")
@@ -113,20 +111,6 @@ newPokemon()
     flex-direction: column;
 }
 
-.poke-img-holder {
-    height: 70%;
-    width: 70%;
-    background-color: var(--background);
-    -webkit-mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-position: center;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    display: flex;
-    justify-content: center;
-}
-
 .guess,
 .next {
     height: 30%;
@@ -170,21 +154,6 @@ newPokemon()
 
     to {
         transform: scale(1);
-    }
-}
-
-.poke-img-holder img {
-    animation: opacity 0.5s ease-in;
-    overflow: hidden;
-}
-
-@keyframes opacity {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
     }
 }
 

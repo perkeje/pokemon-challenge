@@ -32,4 +32,19 @@ const props = defineProps({
     display: flex;
     justify-content: center;
 }
+
+.poke-img-holder img {
+    animation: opacity 0.5s ease-in;
+    overflow: hidden;
+}
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 </style>
