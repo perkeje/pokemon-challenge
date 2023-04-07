@@ -40,6 +40,12 @@ const { pokedexModal } = storeToRefs(pokemonStore)
     left: 10px;
     right: 10px;
     border-radius: 25px;
+    transition: opacity ease 0.2s;
+}
+
+.nav:hover {
+    opacity: 1;
+    transition: opacity ease 0.2s;
 }
 
 .nav_inner {
