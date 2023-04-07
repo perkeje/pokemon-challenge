@@ -21,6 +21,7 @@ jsConfetti.addConfetti({
 .winning-content {
     position: relative;
     height: 100%;
+    color: var(--primary-color);
 }
 
 .img-holder {

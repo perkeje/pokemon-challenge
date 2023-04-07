@@ -19,7 +19,6 @@ import Pokeball from './Pokeball.vue';
 @keyframes jummping {
 
      25%{
-        /* rotate: -10deg; */
         top: 30%;
         left: -80%;
         rotate: 0deg;
@@ -47,6 +46,6 @@ import Pokeball from './Pokeball.vue';
 }
 .loading-text p{
     font-size: 1.5em;
-    color: var(--primary-color);
+    color: black;
 }
 </style>
