@@ -36,8 +36,7 @@ setTimeout(() => changeBackground(), 20000);
 
 <style scoped>
 .background-wrapper {
-  transition: background-image 0.4s ease-in;
-  overflow: hidden;
+  transition: background-image 0.5s ease-in;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
