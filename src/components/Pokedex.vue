@@ -80,6 +80,7 @@ onMounted(async () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: var(--primary-color);
 }
 
 .pokemon-holder p {
@@ -137,6 +138,7 @@ button:disabled {
     height: 80%;
     animation: appear 0.3s ease-out 1.2s;
     animation-fill-mode: backwards;
+    color: var(--primary-color);
 }
 
 @keyframes appear {

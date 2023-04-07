@@ -4,5 +4,14 @@
 --error: red;
 --success: #13d813;
 
---dark-mode: #091a28;
+--background: black;
+}
+
+:root.dark-theme{
+    --primary-color: #faf9f6;
+    --secondary-color: #333333;
+    --error: red;
+    --success: #13d813;
+
+    --background: #F2F2F2;
 }

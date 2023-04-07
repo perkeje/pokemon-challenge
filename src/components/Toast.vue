@@ -78,6 +78,7 @@ show()
     border-radius: 0px 10px 10px 10px;
     padding: 10px;
     z-index: 100;
+    color: var(--primary-color);
 }
 
 .toast-container:hover {
@@ -116,4 +117,5 @@ show()
     translate: -30% -30%;
     color: var(--primary-color);
     cursor: pointer;
-}</style>
+}
+</style>

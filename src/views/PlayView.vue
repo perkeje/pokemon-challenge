@@ -115,7 +115,7 @@ newPokemon()
 .poke-img-holder {
     height: 70%;
     width: 70%;
-    background-color: black;
+    background-color: var(--background);
     -webkit-mask-position: center;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
@@ -134,6 +134,7 @@ newPokemon()
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    color: var(--primary-color);
 }
 
 .pokemon-text p {

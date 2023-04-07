@@ -9,7 +9,8 @@ type PokemonState = {
   pokemonApiUrl: string
   pokemonPictureUrl: string,
   pokedex: Set<number>,
-  pokedexModal: boolean
+  pokedexModal: boolean,
+  theme: string
 }
 
 export const usePokemonStore = defineStore('pokemon', {
@@ -20,7 +21,8 @@ export const usePokemonStore = defineStore('pokemon', {
     pokemonApiUrl: 'https://pokeapi.co/api/v2/pokemon/',
     pokemonPictureUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/',
     pokedex: new Set<number>(),
-    pokedexModal: false
+    pokedexModal: false,
+    theme: 'light'
   }),
   actions: {
     getRandomPokemonId() {
