@@ -21,6 +21,12 @@ const updateThemeClass = () => {
 };
 
 onMounted(() => {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme.value = 'dark'
+    }
+    else {
+        theme.value = 'light'
+    }
     updateThemeClass();
 });
 
