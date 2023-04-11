@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import Pokemon from './Pokemon.vue';
 import ProgressBar from './ProgressBar.vue';
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
