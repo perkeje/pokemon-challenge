@@ -9,16 +9,29 @@ import { onMounted, ref } from 'vue';
 const pokemonStore = usePokemonStore()
 const { isLoading, totalPages, pokedex, maxPokemons } = storeToRefs(pokemonStore)
 const currentPage = ref(1)
+const isError = ref(false)
 let pokemons = ref()
 let progress = ref(Math.floor(pokedex.value.size / maxPokemons.value * 100))
 
 const changePage = async (page: number) => {
-    pokemons.value = await pokemonStore.getPokemons(page)
-    currentPage.value = page
+    try {
+        isError.value = false
+        pokemons.value = await pokemonStore.getPokemons(page)
+        currentPage.value = page
+    }
+    catch {
+        isError.value = true
+    }
 }
 
 onMounted(async () => {
-    pokemons.value = await pokemonStore.getPokemons(currentPage.value)
+    try {
+        isError.value = false
+        pokemons.value = await pokemonStore.getPokemons(currentPage.value)
+    } catch {
+        isError.value = true
+    }
+
 })
 
 </script>
@@ -27,7 +40,7 @@ onMounted(async () => {
     <div class="loading" v-if="isLoading">
         <Loading></Loading>
     </div>
-    <div class="pokedex-container" v-if="!isLoading">
+    <div class="pokedex-container" v-if="!isLoading && !isError">
         <div class="progress">
             <div class="progress-percentage">
                 <p>{{ progress }}%</p>
@@ -50,6 +63,9 @@ onMounted(async () => {
             <button @click="async () => await changePage(++currentPage)"
                 :disabled="currentPage === totalPages">Next</button>
         </div>
+    </div>
+    <div class="error-container" v-else>
+        <Error :handle-click="changePage" />
     </div>
 </template>
 

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Select, CloseBold } from '@element-plus/icons-vue'
 import Toast from '@/components/Toast.vue';
 import Winning from '@/components/Winning.vue';
 import Pokemon from '@/components/Pokemon.vue';
+import Error from '@/components/Error.vue';
 
 const isGuessed = ref(false)
 const userGuess = ref("")
+const isError = ref(false)
 const isCorrect = ref(false)
 const randomPokemonImg = ref("")
 const pokemonStore = usePokemonStore()
@@ -18,6 +20,7 @@ const isWin = ref(false)
 let id = 0
 
 const newPokemon = () => {
+    isError.value = false
     if (checkPokedex()) return
     isGuessed.value = false
     id = pokemonStore.getRandomPokemonId()
@@ -33,22 +36,31 @@ const guess = async () => {
         return
     }
     if (!isGuessed) return
+    try {
+        pokemon.value = await pokemonStore.getPokemonName(id);
 
-    pokemon.value = await pokemonStore.getPokemonName(id);
-    isGuessed.value = !isGuessed.value
+        isGuessed.value = !isGuessed.value
 
-    if (pokemon?.value != undefined) {
-        if (pokemon?.value === userGuess.value.toLowerCase()) {
-            isCorrect.value = true
-            pokemonStore.storeToPokedex(id)
+        if (pokemon?.value != undefined) {
+            if (pokemon?.value === userGuess.value.toLowerCase()) {
+                isCorrect.value = true
+                pokemonStore.storeToPokedex(id)
+            }
+            else {
+                isCorrect.value = false
+            }
         }
-        else {
-            isCorrect.value = false
-        }
+        userGuess.value = ""
     }
-    userGuess.value = ""
+    catch {
+        isError.value = true
+    }
+
 }
-newPokemon()
+onMounted(() => {
+    newPokemon()
+})
+
 
 
 </script>
@@ -58,7 +70,7 @@ newPokemon()
         <div class="play-content">
             <Toast v-if="isCorrect && !isGuessed" title="Correct!" :message="pokemon.toUpperCase() + ' added to Pokedex'"
                 :duration="3000" />
-            <label for="guess-input" v-if="!isWin">
+            <label for="guess-input" v-if="!isWin && !isError">
                 <div class="play-container">
                     <Pokemon :display="isGuessed" :pokemon-img="randomPokemonImg" />
                     <div class="guess" v-if="!isGuessed">
@@ -78,8 +90,11 @@ newPokemon()
                     </div>
                 </div>
             </label>
-            <div class="winning-container" v-else>
+            <div class="winning-container" v-if="isWin && !isError">
                 <Winning />
+            </div>
+            <div class="error-container" v-if="!isWin && isError">
+                <Error :handle-click="newPokemon" />
             </div>
         </div>
     </div>

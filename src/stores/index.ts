@@ -23,7 +23,7 @@ export const usePokemonStore = defineStore('pokemon', {
     pokedexModal: false,
     theme: 'light'
   }),
-  getters:{
+  getters: {
     getLastAdded: (state) => (Array.from(state.pokedex).pop()),
     progress: (state) => Math.floor(state.pokedex.size / state.maxPokemons * 100)
   },
@@ -41,8 +41,8 @@ export const usePokemonStore = defineStore('pokemon', {
         const response = await request.json()
         const pokemon = response.forms[0].name
         return pokemon
-      } catch {
-
+      } catch (error) {
+        throw error
       }
     },
     storeToPokedex(id: number) {
@@ -66,7 +66,12 @@ export const usePokemonStore = defineStore('pokemon', {
       for (let i = start; i <= end; i++) {
         let name = "???"
         if (this.pokedex.has(i)) {
-          name = await this.getPokemonName(i)
+          try {
+
+            name = await this.getPokemonName(i)
+          } catch (error) {
+            throw error
+          }
         }
         pokemons.push({
           id: i,
