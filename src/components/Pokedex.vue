@@ -5,6 +5,7 @@ import Loading from '@/components/Loading.vue';
 import { usePokemonStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
+import Error from '@/components/Error.vue';
 
 const pokemonStore = usePokemonStore()
 const { isLoading, totalPages, pokedex, maxPokemons } = storeToRefs(pokemonStore)
@@ -37,7 +38,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="loading" v-if="isLoading">
+    <div class="loading" v-if="isLoading && !isError">
         <Loading></Loading>
     </div>
     <div class="pokedex-container" v-if="!isLoading && !isError">
@@ -65,7 +66,7 @@ onMounted(async () => {
         </div>
     </div>
     <div class="error-container" v-else>
-        <Error :handle-click="changePage" />
+        <Error :handle-click="async () => await changePage(currentPage)" />
     </div>
 </template>
 

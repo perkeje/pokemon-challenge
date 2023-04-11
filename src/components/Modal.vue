@@ -12,7 +12,7 @@ const { pokedexModal } = storeToRefs(usePokemonStore())
         <div class="modal">
             <button class="modal-close" @click="pokedexModal = false">
                 <el-icon :size="25">
-                    <Close />
+                    <Close :style="{ 'color': 'var(--primary-color)' }" />
                 </el-icon>
             </button>
             <div class="modal-content">
