@@ -5,6 +5,8 @@
 --success: #13d813;
 
 --background: black;
+--shadow-color: rgba(0, 0, 0, 0.11);
+--skeleton-animation-color: rgba(255,255,255, 0.35);
 }
 
 :root.dark-theme{
@@ -14,4 +16,6 @@
     --success: #13d813;
 
     --background: #F2F2F2;
+    --shadow-color: rgba(255, 255, 255, 0.11);
+    --skeleton-animation-color: rgba(0,0,0, 0.35);
 }

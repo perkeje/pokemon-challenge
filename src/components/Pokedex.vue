@@ -38,10 +38,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="loading" v-if="isLoading && !isError">
-        <Loading></Loading>
-    </div>
-    <div class="pokedex-container" v-if="!isLoading && !isError">
+    <div class="pokedex-container" v-if="!isError">
         <div class="progress">
             <div class="progress-percentage">
                 <p>{{ progress }}%</p>
@@ -51,9 +48,9 @@ onMounted(async () => {
             </div>
         </div>
         <div class="pokedex-grid">
-            <div class="pokemon-holder" v-for="pokemon in pokemons">
-                <Pokemon :pokemon-img="pokemon.img" :display="pokemon.name === '???' ? false : true" />
-                <p>{{ pokemon.name }}</p>
+            <div class="pokemon-holder" :class="{ 'load': isLoading }" v-for="pokemon in pokemons">
+                <Pokemon :pokemon-img="pokemon.img" :display="pokemon.name === '???' ? false : true" v-if="!isLoading" />
+                <p v-if="!isLoading">{{ pokemon.name }}</p>
             </div>
         </div>
 
@@ -71,16 +68,33 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.loading {
-    left: 50%;
-    translate: -50%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    width: 50%;
+.load {
     position: relative;
+    background-color: var(--shadow-color);
+    margin: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 4px 12px var(--shadow-color);
+}
+
+.load::after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg,
+            transparent,
+            var(--skeleton-animation-color),
+            transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .pokedex-grid {
