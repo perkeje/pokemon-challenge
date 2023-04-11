@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { RouterView } from 'vue-router'
-import { usePokemonStore } from '@/stores';
 import Navbar from './components/layouts/Navbar.vue';
 import Modal from './components/Modal.vue';
 import Pokedex from './components/Pokedex.vue';
@@ -17,7 +16,9 @@ const changeBackground = () => {
   setTimeout(() => changeBackground(), 20000);
 }
 
-setTimeout(() => changeBackground(), 20000);
+onMounted(() => {
+  setTimeout(() => changeBackground(), 20000);
+})
 
 </script>
 
