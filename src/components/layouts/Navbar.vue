@@ -35,10 +35,10 @@ const { pokedexModal } = storeToRefs(pokemonStore)
     background-color: var(--secondary-color);
     opacity: 0.75;
     padding: 10px 50px;
-    position: absolute;
+    position:relative;
     top: 10px;
-    left: 10px;
-    right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 25px;
     transition: opacity ease 0.2s;
 }

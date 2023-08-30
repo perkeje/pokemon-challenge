@@ -5,8 +5,15 @@ import Navbar from './components/layouts/Navbar.vue';
 import Modal from './components/Modal.vue';
 import Pokedex from './components/Pokedex.vue';
 import ThemeButton from './components/layouts/ThemeButton.vue';
+import AuthGuard from "./components/AuthGuard.vue";
+import wallpaper1 from './assets/images/wallpaperbetter.jpg';
+import wallpaper2 from './assets/images/wallpaperbetter1.jpg';
+import wallpaper3 from './assets/images/wallpaperbetter2.jpg';
+import wallpaper4 from './assets/images/wallpaperbetter3.jpg';
+import wallpaper5 from './assets/images/wallpaperbetter4.jpg';
+import wallpaper6 from './assets/images/wallpaperbetter5.jpg';
 
-const wallpapers = ['./src/assets/images/wallpaperbetter.jpg', './src/assets/images/wallpaperbetter1.jpg', './src/assets/images/wallpaperbetter2.jpg', './src/assets/images/wallpaperbetter3.jpg', './src/assets/images/wallpaperbetter4.jpg', './src/assets/images/wallpaperbetter5.jpg']
+const wallpapers = [wallpaper1, wallpaper2, wallpaper3, wallpaper4, wallpaper5, wallpaper6];
 const backgroundImg = ref(wallpapers[0])
 let index = 0
 
@@ -28,10 +35,12 @@ onMounted(() => {
     </div>
   </div>
   <Navbar />
+  <AuthGuard>
   <RouterView />
   <Modal>
     <Pokedex />
   </Modal>
+</AuthGuard>
   <ThemeButton />
 </template>
 

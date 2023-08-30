@@ -20,7 +20,7 @@ const props = defineProps({
 
 <style scoped>
 .poke-img-holder {
-    height: 70%;
+    aspect-ratio: 1/1;
     width: 70%;
     background-color: var(--background);
     -webkit-mask-position: center;

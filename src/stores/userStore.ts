@@ -1,0 +1,190 @@
+import { defineStore } from 'pinia';
+import  router  from '../router/index';
+import { $toast } from '@/logic/notification';
+import Cookies from 'universal-cookie';
+import { ref } from 'vue';
+import { setInterval } from 'worker-timers';
+import { $axios } from '../modules/axios';
+
+const cookies = new Cookies();
+
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  pokeMasterTimestamp: string | null;
+  description: string | null;
+  image: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+interface UserSession {
+  id: string;
+  userId: string;
+  csrf: string;
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string;
+}
+
+interface UserData {
+  user: User;
+  userSession: UserSession;
+}
+
+export const useUserStore = defineStore('user', () => {
+  const user = ref<UserData | undefined>(undefined);
+  const isLoading = ref<boolean>(false);
+
+  function getCSRFHeader() {
+    
+    return cookies.get('X-CSRF-TOKEN')
+  }
+
+  async function login(email: string, password: string) {
+    isLoading.value = true;
+    await $axios
+      .post('/auth/login', {
+        email: email,
+        password: password,
+      })
+      .then(async (response) => {
+        cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
+          path: '/',
+          sameSite: 'strict',
+        });
+        user.value = response.data;
+        $toast({
+          message: 'Authentication successful',
+          type: 'success',
+        });
+        router.push({ path: '/' });
+      })
+      .catch((error) => {
+        $toast({
+          title: error?.response?.statusText,
+          message: error?.response?.data?.cause || 'Login error',
+          type: 'error',
+          duration: 'long',
+        });
+        throw error;
+      })
+      .finally(async () => {
+        isLoading.value = false;
+      });
+  }
+
+  async function register(firstName:string, lastName:string, email: string, username:string, password: string) {
+    isLoading.value = true;
+    await $axios
+      .post('/auth/register', {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        username: username,
+        password: password,
+      })
+      .then(async (response) => {
+        user.value = response.data;
+        $toast({
+          message: 'Registration successful',
+          type: 'success',
+        });
+        router.push({ path: '/registration-submitted' });
+      })
+      .catch((error) => {
+        $toast({
+          title: error?.response?.statusText,
+          message: error?.response?.data?.cause || 'Registration error',
+          type: 'error',
+          duration: 'long',
+        });
+        throw error;
+      })
+      .finally(async () => {
+        isLoading.value = false;
+      });
+  }
+
+  async function refreshSession() {
+    try {
+      
+      const response = await $axios.post('/auth/refresh');
+      
+      cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
+        path: '/',
+        sameSite: 'strict',
+      });
+      user.value = response.data;
+      return user.value;
+    } catch (error: any) {
+      
+      $toast({
+        message: 'Session expired',
+        type: 'error',
+        duration: 'short',
+      });
+      await logout();
+    }
+  }
+
+  async function veirifyAccount(token: string) {
+    try {
+      
+      const response = await $axios.get('/auth/verify/'+token);
+      
+      cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
+        path: '/',
+        sameSite: 'strict',
+      });
+      user.value = response.data;
+      return user.value;
+    } catch (error: any) {
+      
+      $toast({
+        title: 'Verification error',
+        message: error?.response?.data?.cause || 'Verification error',
+        type: 'error',
+        duration: 'short',
+      });
+    }
+  }
+
+  function setRefreshSession() {
+    setInterval(async () => {            
+      if (!user.value) {
+        return
+      }
+      let expireTime = new Date(user.value?.userSession.expiresAt).getTime();
+      let currentTime = new Date().getTime();
+      let timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+      let remainingTime = expireTime - currentTime - timezoneOffset;
+
+      if (remainingTime < 10000) {
+        await refreshSession();
+      }
+    }, 5000);
+  }
+
+  async function logout() {
+    try {
+      await $axios.post('/auth/logout');
+    } catch (error: any) {
+      $toast({
+        message: error,
+        type: 'error',
+        duration: 'long',
+      });
+    }
+    cookies.remove('X-CSRF-TOKEN', { path: '/' });
+    cookies.remove(import.meta.env.VITE_COOKIE_NAME as string);
+    user.value = undefined;
+    await router.push({ path: '/' });
+  }
+
+  return { getCSRFHeader,user, isLoading, login, register, veirifyAccount, refreshSession, logout, setRefreshSession };
+});

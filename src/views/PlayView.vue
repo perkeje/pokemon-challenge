@@ -111,7 +111,7 @@ onMounted(() => {
 
 .play-content {
     background-color: var(--secondary-color);
-    height: 500px;
+    aspect-ratio: 1/1;
     width: 90%;
     max-width: 500px;
     border-radius: 25px;
