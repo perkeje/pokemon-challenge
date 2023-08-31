@@ -1,12 +1,12 @@
-import { ElNotification } from 'element-plus';
+import { ElNotification } from "element-plus";
 
-type notificationTypes = 'info' | 'warning' | 'success' | 'error';
+type notificationTypes = "info" | "warning" | "success" | "error";
 type notificationPosition =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
-type notificationDuration = 'short' | 'normal' | 'long';
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+type notificationDuration = "short" | "normal" | "long";
 
 export const $toast = (toast: {
   title?: string;
@@ -23,10 +23,10 @@ export const $toast = (toast: {
     toast.offset = 70;
   }
 
-  if (toast.duration == 'short') {
+  if (toast.duration == "short") {
     // set sort duration
     durationInMiliseconds = 1000;
-  } else if (toast.duration == 'long') {
+  } else if (toast.duration == "long") {
     // set long duration
     durationInMiliseconds = 5000;
   }

@@ -22,19 +22,21 @@
         placeholder="Confirm New Password"
       />
       <p class="password-strength">{{ passwordStrengthFeedback }}</p>
-      <button class="change-password-btn" @click="changePassword">Change Password</button>
+      <button class="change-password-btn" @click="changePassword">
+        Change Password
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import zxcvbn from 'zxcvbn'; // Make sure to install this library
+import { ref } from "vue";
+import zxcvbn from "zxcvbn"; // Make sure to install this library
 
-const oldPassword = ref('');
-const newPassword = ref('');
-const confirmPassword = ref('');
-const passwordStrengthFeedback = ref('');
+const oldPassword = ref("");
+const newPassword = ref("");
+const confirmPassword = ref("");
+const passwordStrengthFeedback = ref("");
 
 const checkPasswordStrength = () => {
   const result = zxcvbn(newPassword.value);
@@ -42,7 +44,11 @@ const checkPasswordStrength = () => {
 
   // Map the zxcvbn score to a custom feedback message
   const strengthFeedback = [
-    'Very Weak', 'Weak', 'Moderate', 'Strong', 'Very Strong'
+    "Very Weak",
+    "Weak",
+    "Moderate",
+    "Strong",
+    "Very Strong",
   ][strength];
 
   passwordStrengthFeedback.value = strengthFeedback;

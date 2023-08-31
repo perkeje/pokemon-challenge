@@ -1,39 +1,41 @@
 <template>
   <div class="success-page">
     <div class="success-content">
-      <h1 class="success-title">Email Verification Successful!</h1>
-      <p class="success-message">
-        Congratulations! Your email has been successfully verified. You are now ready to start your journey as a Pokémon
-        Trainer!
-      </p>
+      <h1 class="success-title">{{ title }}</h1>
+      <p class="success-message">{{ message }}</p>
       <button class="back-to-home-btn" @click="goToHome">Back to Home</button>
     </div>
   </div>
 </template>
-  
+
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
-import { useUserStore } from '@/stores/userStore';
-import { onMounted } from 'vue';
+import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import { onMounted, ref } from "vue";
 
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const token = route.params.token as string;
 
-const verifyAccount = async () => {
-  await userStore.veirifyAccount(token);
-};
+const title = ref("");
+const message = ref("");
 
-onMounted(() => {
-  verifyAccount();
+onMounted(async () => {
+  const verification = await userStore.veirifyAccount(token);
+  title.value = verification.success
+    ? "Email Verification Successful!"
+    : "Email Verification Failed";
+  message.value = verification.success
+    ? "Congratulations! Your email has been successfully verified. You are now ready to start your journey as a Pokémon Trainer!"
+    : `Sorry, your email verification was unsuccessful due to ${verification.error}. Please try again or contact support.`;
 });
 
 const goToHome = () => {
-  router.push('/');
+  router.push("/");
 };
 </script>
-  
+
 <style scoped>
 .success-page {
   height: 100vh;
@@ -84,7 +86,5 @@ const goToHome = () => {
 
 .back-to-home-btn:hover {
   background-color: #888888;
-  ;
 }
 </style>
-  

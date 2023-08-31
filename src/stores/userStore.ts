@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia';
-import  router  from '../router/index';
-import { $toast } from '@/logic/notification';
-import Cookies from 'universal-cookie';
-import { ref } from 'vue';
-import { setInterval } from 'worker-timers';
-import { $axios } from '../modules/axios';
+import { defineStore } from "pinia";
+import router from "../router/index";
+import { $toast } from "@/logic/notification";
+import Cookies from "universal-cookie";
+import { ref } from "vue";
+import { setInterval } from "worker-timers";
+import { $axios } from "../modules/axios";
 
 const cookies = new Cookies();
 
@@ -36,40 +36,39 @@ interface UserData {
   userSession: UserSession;
 }
 
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore("user", () => {
   const user = ref<UserData | undefined>(undefined);
   const isLoading = ref<boolean>(false);
 
   function getCSRFHeader() {
-    
-    return cookies.get('X-CSRF-TOKEN')
+    return cookies.get("X-CSRF-TOKEN");
   }
 
   async function login(email: string, password: string) {
     isLoading.value = true;
     await $axios
-      .post('/auth/login', {
+      .post("/auth/login", {
         email: email,
         password: password,
       })
       .then(async (response) => {
-        cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
-          path: '/',
-          sameSite: 'strict',
+        cookies.set("X-CSRF-TOKEN", response?.data.userSession.csrf, {
+          path: "/",
+          sameSite: "strict",
         });
         user.value = response.data;
         $toast({
-          message: 'Authentication successful',
-          type: 'success',
+          message: "Authentication successful",
+          type: "success",
         });
-        router.push({ path: '/' });
+        router.push({ path: "/" });
       })
       .catch((error) => {
         $toast({
           title: error?.response?.statusText,
-          message: error?.response?.data?.cause || 'Login error',
-          type: 'error',
-          duration: 'long',
+          message: error?.response?.data?.cause || "Login error",
+          type: "error",
+          duration: "long",
         });
         throw error;
       })
@@ -78,10 +77,16 @@ export const useUserStore = defineStore('user', () => {
       });
   }
 
-  async function register(firstName:string, lastName:string, email: string, username:string, password: string) {
+  async function register(
+    firstName: string,
+    lastName: string,
+    email: string,
+    username: string,
+    password: string,
+  ) {
     isLoading.value = true;
     await $axios
-      .post('/auth/register', {
+      .post("/auth/register", {
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -91,17 +96,17 @@ export const useUserStore = defineStore('user', () => {
       .then(async (response) => {
         user.value = response.data;
         $toast({
-          message: 'Registration successful',
-          type: 'success',
+          message: "Registration successful",
+          type: "success",
         });
-        router.push({ path: '/registration-submitted' });
+        router.push({ path: "/registration-submitted" });
       })
       .catch((error) => {
         $toast({
           title: error?.response?.statusText,
-          message: error?.response?.data?.cause || 'Registration error',
-          type: 'error',
-          duration: 'long',
+          message: error?.response?.data?.cause || "Registration error",
+          type: "error",
+          duration: "long",
         });
         throw error;
       })
@@ -112,21 +117,19 @@ export const useUserStore = defineStore('user', () => {
 
   async function refreshSession() {
     try {
-      
-      const response = await $axios.post('/auth/refresh');
-      
-      cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
-        path: '/',
-        sameSite: 'strict',
+      const response = await $axios.post("/auth/refresh");
+
+      cookies.set("X-CSRF-TOKEN", response?.data.userSession.csrf, {
+        path: "/",
+        sameSite: "strict",
       });
       user.value = response.data;
       return user.value;
     } catch (error: any) {
-      
       $toast({
-        message: 'Session expired',
-        type: 'error',
-        duration: 'short',
+        message: "Session expired",
+        type: "error",
+        duration: "short",
       });
       await logout();
     }
@@ -134,30 +137,28 @@ export const useUserStore = defineStore('user', () => {
 
   async function veirifyAccount(token: string) {
     try {
-      
-      const response = await $axios.get('/auth/verify/'+token);
-      
-      cookies.set('X-CSRF-TOKEN', response?.data.userSession.csrf, {
-        path: '/',
-        sameSite: 'strict',
+      const response = await $axios.get("/auth/verify/" + token);
+
+      cookies.set("X-CSRF-TOKEN", response?.data.userSession.csrf, {
+        path: "/",
+        sameSite: "strict",
       });
       user.value = response.data;
-      return user.value;
+      return {
+        success: true,
+      };
     } catch (error: any) {
-      
-      $toast({
-        title: 'Verification error',
-        message: error?.response?.data?.cause || 'Verification error',
-        type: 'error',
-        duration: 'short',
-      });
+      return {
+        success: false,
+        error: error?.response?.data?.cause || "Unknown error",
+      };
     }
   }
 
   function setRefreshSession() {
-    setInterval(async () => {            
+    setInterval(async () => {
       if (!user.value) {
-        return
+        return;
       }
       let expireTime = new Date(user.value?.userSession.expiresAt).getTime();
       let currentTime = new Date().getTime();
@@ -172,19 +173,29 @@ export const useUserStore = defineStore('user', () => {
 
   async function logout() {
     try {
-      await $axios.post('/auth/logout');
+      await $axios.post("/auth/logout");
     } catch (error: any) {
       $toast({
         message: error,
-        type: 'error',
-        duration: 'long',
+        type: "error",
+        duration: "long",
       });
     }
-    cookies.remove('X-CSRF-TOKEN', { path: '/' });
-    cookies.remove(import.meta.env.VITE_COOKIE_NAME as string);
+    cookies.remove("X-CSRF-TOKEN", { path: "/" });
+    // cookies.remove(import.meta.env.VITE_COOKIE_NAME as string);
     user.value = undefined;
-    await router.push({ path: '/' });
+    await router.push({ path: "/" });
   }
 
-  return { getCSRFHeader,user, isLoading, login, register, veirifyAccount, refreshSession, logout, setRefreshSession };
+  return {
+    getCSRFHeader,
+    user,
+    isLoading,
+    login,
+    register,
+    veirifyAccount,
+    refreshSession,
+    logout,
+    setRefreshSession,
+  };
 });

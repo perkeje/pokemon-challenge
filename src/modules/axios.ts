@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { $toast } from '@/logic/notification';
+import axios from "axios";
+import { $toast } from "@/logic/notification";
 import type {
   ResponseType400,
   ResponseType401,
   ResponseType403,
   ResponseType404,
-} from '../logic/responseHandler';
-import { responseCodes } from '../logic/responseHandler';
-import Cookies from 'universal-cookie';
+} from "../logic/responseHandler";
+import { responseCodes } from "../logic/responseHandler";
+import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 const API_CONFIG = {
@@ -16,7 +16,7 @@ const API_CONFIG = {
   timeout: 100_000,
   headers: {
     common: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   },
 };
@@ -25,20 +25,20 @@ export const $axios = axios.create(API_CONFIG as any);
 
 $axios.interceptors.request.use(
   (req) => {
-    const ignore: Array<string> = ['/auth/login', '/auth/register'];
+    const ignore: Array<string> = ["/auth/login", "/auth/register"];
     if (req && !ignore.includes(req.url as string)) {
-    const X_CSRF_TOKEN: string = cookies.get('X-CSRF-TOKEN');    
+      const X_CSRF_TOKEN: string = cookies.get("X-CSRF-TOKEN");
       if (X_CSRF_TOKEN) {
         // @ts-ignore
-        req.headers.set('X-CSRF-TOKEN',X_CSRF_TOKEN);
+        req.headers.set("X-CSRF-TOKEN", X_CSRF_TOKEN);
       }
     }
 
     return req;
   },
-  (error: any) => {    
+  (error: any) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 $axios.interceptors.response.use(
@@ -46,7 +46,7 @@ $axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (window.location.pathname === '/') {
+    if (window.location.pathname === "/") {
       return Promise.reject(error);
     }
     switch (error?.response?.status) {
@@ -54,13 +54,13 @@ $axios.interceptors.response.use(
         if (
           Object.prototype.hasOwnProperty.call(
             responseCodes[400],
-            error?.response?.data?.code
+            error?.response?.data?.code,
           )
         ) {
           $toast({
             message: error?.response?.data?.cause,
-            type: 'error',
-            duration: 'long',
+            type: "error",
+            duration: "long",
           });
           responseCodes[400][
             error.response.data.code as ResponseType400
@@ -71,13 +71,13 @@ $axios.interceptors.response.use(
         if (
           Object.prototype.hasOwnProperty.call(
             responseCodes[401],
-            error?.response?.data?.code
+            error?.response?.data?.code,
           )
         ) {
           $toast({
             message: error?.response?.data?.cause,
-            type: 'error',
-            duration: 'long',
+            type: "error",
+            duration: "long",
           });
           responseCodes[401][
             error.response.data.code as ResponseType401
@@ -88,13 +88,13 @@ $axios.interceptors.response.use(
         if (
           Object.prototype.hasOwnProperty.call(
             responseCodes[403],
-            error?.response?.data?.code
+            error?.response?.data?.code,
           )
         ) {
           $toast({
             message: error?.response?.data?.cause,
-            type: 'error',
-            duration: 'long',
+            type: "error",
+            duration: "long",
           });
 
           responseCodes[403][
@@ -106,13 +106,13 @@ $axios.interceptors.response.use(
         if (
           Object.prototype.hasOwnProperty.call(
             responseCodes[404],
-            error?.response?.data?.code
+            error?.response?.data?.code,
           )
         ) {
           $toast({
             message: error?.response?.data?.cause,
-            type: 'error',
-            duration: 'long',
+            type: "error",
+            duration: "long",
           });
 
           responseCodes[404][
@@ -122,5 +122,5 @@ $axios.interceptors.response.use(
         break;
     }
     return Promise.reject(error);
-  }
+  },
 );

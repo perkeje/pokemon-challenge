@@ -1,21 +1,21 @@
-:root{
---primary-color: #333333;
---secondary-color: #faf9f6;
---error: red;
---success: #13d813;
+:root {
+  --primary-color: #333333;
+  --secondary-color: #faf9f6;
+  --error: red;
+  --success: #13d813;
 
---background: black;
---shadow-color: rgba(0, 0, 0, 0.11);
---skeleton-animation-color: rgba(255,255,255, 0.35);
+  --background: black;
+  --shadow-color: rgba(0, 0, 0, 0.11);
+  --skeleton-animation-color: rgba(255, 255, 255, 0.35);
 }
 
-:root.dark-theme{
-    --primary-color: #faf9f6;
-    --secondary-color: #333333;
-    --error: red;
-    --success: #13d813;
+:root.dark-theme {
+  --primary-color: #faf9f6;
+  --secondary-color: #333333;
+  --error: red;
+  --success: #13d813;
 
-    --background: #F2F2F2;
-    --shadow-color: rgba(255, 255, 255, 0.11);
-    --skeleton-animation-color: rgba(0,0,0, 0.35);
+  --background: #f2f2f2;
+  --shadow-color: rgba(255, 255, 255, 0.11);
+  --skeleton-animation-color: rgba(0, 0, 0, 0.35);
 }

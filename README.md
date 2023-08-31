@@ -20,7 +20,7 @@ The game should follow these rules:
 
 ### Pokedex
 
-At any point during the game the user can open his or her pokedex in a popup. The pokedex contains a list of all pokemon in the game. 
+At any point during the game the user can open his or her pokedex in a popup. The pokedex contains a list of all pokemon in the game.
 
 Pokemon the user has guessed are displayed with their sprite. Pokemon the user hasn't guessed are displayed with a question mark.
 
@@ -40,6 +40,7 @@ By clicking on a known (guessed) pokemon in the list the pokemon's details are s
 - investigate and use [nuxt modules](https://github.com/nuxt-community/awesome-nuxt) that can be helpful
 
 ### Additional points
+
 - make theme switcher (light-dark)
 - use important concepts: computed properties, watchers, global components, props, vuex actions, mutations, getters
 - use nuxt pwa module

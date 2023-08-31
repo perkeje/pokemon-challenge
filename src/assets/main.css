@@ -1,7 +1,5 @@
-@import './base.css';
-@import './styles/variables/colors.css'
-
-/* #app {
+@import "./base.css";
+@import "./styles/variables/colors.css"; /* #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;

@@ -23,8 +23,12 @@
         </el-form-item>
 
         <el-form-item label="Last Name" prop="lastName">
-          <el-input class="registration-input" v-model="ruleForm.lastName" type="text"
-          @keyup.enter="submitForm(ruleFormRef)" />
+          <el-input
+            class="registration-input"
+            v-model="ruleForm.lastName"
+            type="text"
+            @keyup.enter="submitForm(ruleFormRef)"
+          />
         </el-form-item>
 
         <el-form-item label="Email" prop="email">
@@ -46,37 +50,43 @@
         </el-form-item>
 
         <el-form-item label="Password" prop="password">
-        <el-input
-          class="registration-input"
-          v-model="ruleForm.password"
-          type="password"
-          @input="checkPasswordStrength"
-          @keyup.enter="submitForm(ruleFormRef)"
-        />
-        <div v-if="passwordStrengthFeedback !== ''" :class="{ 'weak-password': isWeakPassword, 'password-strength':true }">
-          {{ passwordStrengthFeedback }}
-        </div>
-      </el-form-item>
+          <el-input
+            class="registration-input"
+            v-model="ruleForm.password"
+            type="password"
+            @input="checkPasswordStrength"
+            @keyup.enter="submitForm(ruleFormRef)"
+          />
+          <div
+            v-if="passwordStrengthFeedback !== ''"
+            :class="{
+              'weak-password': isWeakPassword,
+              'password-strength': true,
+            }"
+          >
+            {{ passwordStrengthFeedback }}
+          </div>
+        </el-form-item>
 
-      <el-form-item label="Confirm Password" prop="confirmPassword">
-        <el-input
-          class="registration-input"
-          v-model="ruleForm.confirmPassword"
-          type="password"
-          @keyup.enter="submitForm(ruleFormRef)"
-        />
-      </el-form-item>
+        <el-form-item label="Confirm Password" prop="confirmPassword">
+          <el-input
+            class="registration-input"
+            v-model="ruleForm.confirmPassword"
+            type="password"
+            @keyup.enter="submitForm(ruleFormRef)"
+          />
+        </el-form-item>
 
         <el-button
-        class="registration-btn"
-        size="large"
-        type="primary"
-        :loading="isLoading"
-        :disabled="isWeakPassword || passwordMismatch"
-        @click="submitForm(ruleFormRef)"
-      >
-        Register
-      </el-button>
+          class="registration-btn"
+          size="large"
+          type="primary"
+          :loading="userStore.isLoading"
+          :disabled="isWeakPassword || passwordMismatch"
+          @click="submitForm(ruleFormRef)"
+        >
+          Register
+        </el-button>
       </el-form>
       <Router-link to="/login" class="back-to-login">
         Already have an account? Log in here!
@@ -86,67 +96,88 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
-import zxcvbn from 'zxcvbn';
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
-import type { FormInstance, FormRules } from 'element-plus';
-import { useUserStore } from '@/stores/userStore';
+import { computed, reactive, ref } from "vue";
+import zxcvbn from "zxcvbn";
+import { ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
+import type { FormInstance, FormRules } from "element-plus";
+import { useUserStore } from "@/stores/userStore";
 
 const userStore = useUserStore();
 
 const ruleFormRef = ref<FormInstance>();
-const isLoading = ref(false);
 
 const ruleForm = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
-  username: '',
-  password: '',
-  confirmPassword: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
 });
 
 const rules = ref<FormRules>({
-  firstName: [{ required: true, message: 'First Name is required', trigger: 'blur' }],
-  lastName: [{ required: true, message: 'Last Name is required', trigger: 'blur' }],
-  email: [
-    { required: true, message: 'Email is required', trigger: 'blur' },
-    { type: 'email', message: 'Please enter a valid email address', trigger: 'blur' },
+  firstName: [
+    { required: true, message: "First Name is required", trigger: "blur" },
   ],
-  username: [{ required: true, message: 'Username is required', trigger: 'blur' }],
-  password: [{ required: true, message: 'Password is required', trigger: 'blur' },
-  {
-    validator: (rule, value, callback) => {
-      if (zxcvbn(value).score < 3) {
-        callback(new Error('Password is too weak'));
-      } else {
-        callback();
-      }
-    },
-    trigger: 'blur',
-  },],
-  confirmPassword: [
-    { required: true, message: 'Confirm Password is required', trigger: 'blur' },
+  lastName: [
+    { required: true, message: "Last Name is required", trigger: "blur" },
+  ],
+  email: [
+    { required: true, message: "Email is required", trigger: "blur" },
     {
-    validator: (rule, value, callback) => {
-      if (value !== ruleForm.password) {
-        callback(new Error('Passwords do not match'));
-      } else {
-        callback();
-      }
+      type: "email",
+      message: "Please enter a valid email address",
+      trigger: "blur",
     },
-    trigger: 'blur',
-  },
+  ],
+  username: [
+    { required: true, message: "Username is required", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "Password is required", trigger: "blur" },
+    {
+      validator: (rule, value, callback) => {
+        if (zxcvbn(value).score < 3) {
+          callback(new Error("Password is too weak"));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur",
+    },
+  ],
+  confirmPassword: [
+    {
+      required: true,
+      message: "Confirm Password is required",
+      trigger: "blur",
+    },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== ruleForm.password) {
+          callback(new Error("Passwords do not match"));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur",
+    },
   ],
 });
 
-const passwordStrengthFeedback = ref('');
+const passwordStrengthFeedback = ref("");
 
 const checkPasswordStrength = () => {
   const result = zxcvbn(ruleForm.password);
-  const strength = result.score; 
+  const strength = result.score;
 
-  const strengthFeedback = ['Very Weak', 'Weak', 'Moderate', 'Strong', 'Very Strong'][strength];
+  const strengthFeedback = [
+    "Very Weak",
+    "Weak",
+    "Moderate",
+    "Strong",
+    "Very Strong",
+  ][strength];
 
   passwordStrengthFeedback.value = strengthFeedback;
 };
@@ -163,7 +194,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid) => {
     if (valid) {
-      userStore.register(ruleForm.firstName, ruleForm.lastName,ruleForm.email,ruleForm.username, ruleForm.password);
+      userStore.register(
+        ruleForm.firstName,
+        ruleForm.lastName,
+        ruleForm.email,
+        ruleForm.username,
+        ruleForm.password,
+      );
     }
   });
 };
@@ -171,12 +208,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 <style scoped>
 .registration-wrapper {
-    position:absolute;
-    padding: 10% 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  padding: 10% 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .registration-content {
@@ -194,16 +231,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 .registration-content form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
 
-  .registration-content form  div{
-    width: 100%;
-  }
+.registration-content form div {
+  width: 100%;
+}
 
 .registration-title {
   font-size: 2em;
