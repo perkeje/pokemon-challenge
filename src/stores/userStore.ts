@@ -191,6 +191,55 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function sendPasswordReset(email: string) {
+    isLoading.value = true;
+    try {
+      await $axios.post("/auth/reset", {
+        email: email,
+      });
+      isLoading.value = false;
+      $toast({
+        message:
+          "Request for password reset has been sent to your email! Check your inbox",
+        type: "success",
+        duration: "long",
+      });
+      router.push({ path: "/login" });
+    } catch (error: any) {
+      $toast({
+        title: error?.response?.statusText,
+        message: error?.response?.data?.cause || "Password reset error",
+        type: "error",
+        duration: "long",
+      });
+      isLoading.value = false;
+    }
+  }
+
+  async function resetPassword(token: string, password: string) {
+    isLoading.value = true;
+    try {
+      await $axios.post("/auth/reset/" + token, {
+        password: password,
+      });
+      isLoading.value = false;
+      $toast({
+        message: "Password reseted successfuly! Try to log in!",
+        type: "success",
+        duration: "long",
+      });
+      router.push({ path: "/login" });
+    } catch (error: any) {
+      $toast({
+        title: error?.response?.statusText,
+        message: error?.response?.data?.cause || "Password reset error",
+        type: "error",
+        duration: "long",
+      });
+      isLoading.value = false;
+    }
+  }
+
   function setRefreshSession() {
     setInterval(async () => {
       if (!user.value) {
@@ -234,5 +283,7 @@ export const useUserStore = defineStore("user", () => {
     logout,
     setRefreshSession,
     resendVerificationEmail,
+    sendPasswordReset,
+    resetPassword,
   };
 });

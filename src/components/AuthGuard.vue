@@ -15,12 +15,16 @@ const allowedRoutes = [
   "not_found",
   "verify",
   "not-verified",
+  "reset",
+  "reset-request",
 ];
 const redirectIfLogged = [
   "login",
   "register",
   "registration-submitted",
   "not-verified",
+  "reset",
+  "reset-request",
 ];
 
 // Call setRefreshSession only once, probably during the app initialization

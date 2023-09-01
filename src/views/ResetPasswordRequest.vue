@@ -1,91 +1,142 @@
 <template>
-  <div class="reset-password-page">
-    <div class="reset-password-content">
-      <h1 class="reset-password-title">Reset Your Password</h1>
-      <p class="reset-password-message">
-        Enter your email address below, and we'll send you instructions to reset
-        your password.
-      </p>
-      <input
-        class="reset-password-input"
-        type="email"
-        v-model="email"
-        placeholder="Enter your email"
-      />
-      <button class="reset-password-btn" @click="sendResetEmail">
-        Send Reset Email
-      </button>
-      <p v-if="emailSent" class="success-message">
-        An email has been sent to your inbox with instructions to reset your
-        password. Please check your email.
-      </p>
-    </div>
+  <div class="reset-request-wrapper">
+    <el-card class="reset-request-content">
+      <h4 class="reset-request-title">Forgot Your Password?</h4>
+      <el-form
+        ref="ruleFormRef"
+        label-position="top"
+        status-icon
+        :label-width="100"
+        size="large"
+        :rules="rules"
+        :model="ruleForm"
+        @submit.prevent
+      >
+        <el-form-item label="Email" prop="email">
+          <el-input
+            class="reset-request-input"
+            v-model="ruleForm.email"
+            type="text"
+            @keyup.enter="submitForm(ruleFormRef)"
+          />
+        </el-form-item>
+
+        <el-button
+          class="reset-request-btn"
+          size="large"
+          type="primary"
+          :loading="userStore.isLoading"
+          @click="submitForm(ruleFormRef)"
+        >
+          Send Reset Email
+        </el-button>
+      </el-form>
+      <Router-link to="/login" class="back-to-login">
+        Remember your password? Log in here!
+      </Router-link>
+    </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
+import type { FormInstance, FormRules } from "element-plus";
+import { useUserStore } from "@/stores/userStore";
 
-const email = ref("");
-const emailSent = ref(false);
+const userStore = useUserStore();
 
-const sendResetEmail = () => {
-  // Simulate sending reset email
-  // In a real implementation, you would send an email using a service
-  // and set emailSent to true upon successful email sending
-  emailSent.value = true;
+const ruleFormRef = ref<FormInstance>();
+
+const ruleForm = reactive({
+  email: "",
+});
+
+const rules = reactive<FormRules>({
+  email: [
+    { required: true, message: "Email is required", trigger: "blur" },
+    {
+      type: "email",
+      message: "Please enter a valid email address",
+      trigger: "blur",
+    },
+  ],
+});
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid) => {
+    if (valid) {
+      userStore.sendPasswordReset(ruleForm.email);
+    }
+  });
 };
 </script>
 
 <style scoped>
-.reset-password-page {
-  height: 100vh;
+.reset-request-wrapper {
+  position: absolute;
+  padding: 10% 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background);
 }
 
-.reset-password-content {
-  text-align: center;
-  max-width: 600px;
-  padding: 20px;
-  border-radius: 15px;
+.reset-request-content {
+  flex-grow: 1;
   background-color: var(--secondary-color);
+  width: 90%;
+  max-width: 500px;
+  border-radius: 25px;
+  border-style: hidden;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.reset-password-title {
-  font-size: 2em;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-}
-
-.reset-password-message {
-  font-size: 1.2em;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-}
-
-.reset-password-input {
-  height: 40px;
+.reset-request-content form {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin: 10px 0;
-  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset-request-content form div {
+  width: 100%;
+}
+
+.reset-request-title {
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.reset-request-input {
+  height: 50px;
+  width: 100%;
+  border: 1px hidden;
+  border-radius: 10px;
   font-size: 1em;
-  outline: none;
   transition: border-color 0.3s;
 }
 
-.reset-password-input:focus {
-  border-color: var(--primary-color);
+.reset-request-input:focus {
+  border: 2px solid;
+  border-color: #007acc;
 }
 
-.reset-password-btn {
+.reset-request-btn {
   height: 50px;
-  width: 50%;
-  border-radius: 8px;
+  width: 80%;
+  margin-top: 10px;
+  border-radius: 15px;
   cursor: pointer;
   border: none;
   background-color: var(--primary-color);
@@ -93,15 +144,23 @@ const sendResetEmail = () => {
   font-size: 1.2em;
   font-weight: bold;
   transition: background-color 0.3s;
+  margin-bottom: 20px;
 }
 
-.reset-password-btn:hover {
-  background-color: #007acc;
+.reset-request-btn:hover {
+  background-color: #888888;
 }
 
-.success-message {
-  color: #13d813;
-  font-size: 1.1em;
-  margin-top: 15px;
+.back-to-login {
+  display: flex;
+  justify-content: center;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: color 0.3s;
+}
+
+.back-to-login:hover {
+  color: #007acc;
 }
 </style>

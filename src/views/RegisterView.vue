@@ -82,7 +82,6 @@
           size="large"
           type="primary"
           :loading="userStore.isLoading"
-          :disabled="isWeakPassword || passwordMismatch"
           @click="submitForm(ruleFormRef)"
         >
           Register
@@ -291,10 +290,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 .back-to-login {
+  display: flex;
+  justify-content: center;
   color: var(--primary-color);
   text-decoration: none;
   font-size: 0.9em;
-  margin-top: 20px;
   transition: color 0.3s;
 }
 

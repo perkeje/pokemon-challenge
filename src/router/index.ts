@@ -7,6 +7,8 @@ import RegisterView from "../views/RegisterView.vue";
 import RegistrationSubmit from "../views/RegistrationSubmit.vue";
 import Verification from "../views/Verification.vue";
 import NotVerified from "../views/NotVerified.vue";
+import ResetPasswordVue from "@/views/ResetPassword.vue";
+import ResetPasswordRequestVue from "@/views/ResetPasswordRequest.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +42,16 @@ const router = createRouter({
       path: "/auth/verify/:token",
       name: "verify",
       component: Verification,
+    },
+    {
+      path: "/auth/password-reset/:token",
+      name: "reset",
+      component: ResetPasswordVue,
+    },
+    {
+      path: "/reset-request",
+      name: "reset-request",
+      component: ResetPasswordRequestVue,
     },
     {
       path: "/play",

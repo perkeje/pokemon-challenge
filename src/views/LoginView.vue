@@ -82,6 +82,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       <Router-link to="/register" class="back-to-register">
         You are still not our user? Register here!
       </Router-link>
+      <br />
+      <Router-link to="/reset-request" class="back-to-register">
+        Forgot your password?
+      </Router-link>
     </el-card>
   </div>
 </template>
@@ -118,7 +122,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .login-title {
@@ -141,6 +145,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 .back-to-register {
+  display: flex;
+  justify-content: center;
   color: var(--primary-color);
   text-decoration: none;
   font-size: 0.9em;
