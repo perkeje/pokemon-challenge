@@ -14,8 +14,14 @@ const allowedRoutes = [
   "home",
   "not_found",
   "verify",
+  "not-verified",
 ];
-const redirectIfLogged = ["login", "register", "registration-submitted"];
+const redirectIfLogged = [
+  "login",
+  "register",
+  "registration-submitted",
+  "not-verified",
+];
 
 // Call setRefreshSession only once, probably during the app initialization
 userStore.setRefreshSession();

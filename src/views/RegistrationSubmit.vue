@@ -1,4 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+
+const userStore = useUserStore();
+const router = useRouter();
+
+const resendVerification = async () => {
+  await userStore.resendVerificationEmail();
+};
+</script>
 <template>
   <div class="success-page">
     <div class="success-content">
@@ -8,13 +18,14 @@
         verification has been sent to your inbox. Please check your email and
         follow the instructions to complete your registration and start your
         journey as a Pokémon Trainer!
+        <br />If you don't see an email in your inbox you can resend an email
+        bellow.
       </p>
       <RouterLink to="/login" class="back-to-login">Back to Login</RouterLink>
-      <img
-        src="src/assets/images/logo.png"
-        alt="Pokémon Image"
-        class="pokemon-image"
-      />
+      <br />
+      <span @click="resendVerification" class="back-to-login"
+        >Resend verification email</span
+      >
     </div>
   </div>
 </template>
@@ -33,12 +44,15 @@
   padding: 20px;
   border-radius: 15px;
   background-color: var(--secondary-color);
+  transition: background-color ease-out 0.3s;
 }
 
 .success-title {
   font-size: 2.5em;
   color: var(--primary-color);
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .success-message {
@@ -56,6 +70,7 @@
   text-decoration: none;
   font-size: 1.2em;
   transition: color 0.3s;
+  cursor: pointer;
 }
 
 .back-to-login:hover {

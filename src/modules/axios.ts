@@ -25,7 +25,13 @@ export const $axios = axios.create(API_CONFIG as any);
 
 $axios.interceptors.request.use(
   (req) => {
-    const ignore: Array<string> = ["/auth/login", "/auth/register"];
+    const ignore: Array<string> = [
+      "/auth/login",
+      "/auth/register",
+      "auth/resend-verification-email",
+      "auth/reset",
+      "auth/verify",
+    ];
     if (req && !ignore.includes(req.url as string)) {
       const X_CSRF_TOKEN: string = cookies.get("X-CSRF-TOKEN");
       if (X_CSRF_TOKEN) {

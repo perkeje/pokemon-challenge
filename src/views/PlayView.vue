@@ -119,6 +119,7 @@ onMounted(() => {
   max-width: 500px;
   border-radius: 25px;
   padding: 10px 0px;
+  transition: background-color ease-out 0.3s;
 }
 
 .play-container {

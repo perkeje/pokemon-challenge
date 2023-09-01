@@ -6,6 +6,7 @@ import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import RegistrationSubmit from "../views/RegistrationSubmit.vue";
 import Verification from "../views/Verification.vue";
+import NotVerified from "../views/NotVerified.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: "/registration-submitted",
       name: "registration-submitted",
       component: RegistrationSubmit,
+    },
+    {
+      path: "/not-verified",
+      name: "not-verified",
+      component: NotVerified,
     },
     {
       path: "/auth/verify/:token",

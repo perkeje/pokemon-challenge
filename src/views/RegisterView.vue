@@ -247,6 +247,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   font-weight: bold;
   color: var(--primary-color);
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .registration-input {

@@ -50,12 +50,15 @@ const goToHome = () => {
   padding: 20px;
   border-radius: 15px;
   background-color: var(--secondary-color);
+  transition: background-color ease-out 0.3s;
 }
 
 .success-title {
   font-size: 2.5em;
   color: var(--primary-color);
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .success-message {

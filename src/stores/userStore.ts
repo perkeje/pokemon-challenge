@@ -39,6 +39,7 @@ interface UserData {
 export const useUserStore = defineStore("user", () => {
   const user = ref<UserData | undefined>(undefined);
   const isLoading = ref<boolean>(false);
+  const confirmationEmail = ref<string | undefined>(undefined);
 
   function getCSRFHeader() {
     return cookies.get("X-CSRF-TOKEN");
@@ -64,6 +65,11 @@ export const useUserStore = defineStore("user", () => {
         router.push({ path: "/" });
       })
       .catch((error) => {
+        if (error?.response?.data?.cause === "Account not verified") {
+          confirmationEmail.value = email;
+          router.push({ path: "/not-verified" });
+          return;
+        }
         $toast({
           title: error?.response?.statusText,
           message: error?.response?.data?.cause || "Login error",
@@ -94,7 +100,7 @@ export const useUserStore = defineStore("user", () => {
         password: password,
       })
       .then(async (response) => {
-        user.value = response.data;
+        confirmationEmail.value = email;
         $toast({
           message: "Registration successful",
           type: "success",
@@ -155,6 +161,36 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function resendVerificationEmail() {
+    try {
+      await $axios.post("/auth/resend-verification-email", {
+        email: confirmationEmail?.value,
+      });
+      $toast({
+        message: "Resend email successful",
+        type: "success",
+      });
+      router.push({ path: "/registration-submitted" });
+    } catch (error: any) {
+      if (error?.response?.statusText === "Unprocessable Entity") {
+        $toast({
+          message: "Something went wrong, try to log in again.",
+          type: "error",
+          duration: "long",
+        });
+        router.push({ path: "/login" });
+        return;
+      }
+      $toast({
+        title: error?.response?.statusText,
+        message:
+          error?.response?.data?.cause || "Resend verification email error",
+        type: "error",
+        duration: "long",
+      });
+    }
+  }
+
   function setRefreshSession() {
     setInterval(async () => {
       if (!user.value) {
@@ -197,5 +233,6 @@ export const useUserStore = defineStore("user", () => {
     refreshSession,
     logout,
     setRefreshSession,
+    resendVerificationEmail,
   };
 });

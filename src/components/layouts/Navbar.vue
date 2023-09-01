@@ -57,18 +57,19 @@ const logout = async () => {
 .nav {
   background-color: var(--secondary-color);
   opacity: 0.75;
-  padding: 10px 50px;
+  padding: 10px 2%;
   position: relative;
   top: 10px;
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 25px;
-  transition: opacity ease 0.2s;
+  transition: opacity ease-out 0.3s;
+  transition: background-color ease-out 0.3s;
 }
 
 .nav:hover {
   opacity: 1;
-  transition: opacity ease 0.2s;
+  transition: opacity ease-out 0.3s;
 }
 
 .nav_inner {
