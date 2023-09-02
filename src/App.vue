@@ -21,18 +21,18 @@ const wallpapers = [
   wallpaper5,
   wallpaper6,
 ];
-const backgroundImg = ref(wallpapers[0]);
-let index = 0;
+const backgroundImg = ref(wallpapers[5]);
+// let index = 0;
 
-const changeBackground = () => {
-  index = (index + 1) % wallpapers.length;
-  backgroundImg.value = wallpapers[index];
-  setTimeout(() => changeBackground(), 20000);
-};
+// const changeBackground = () => {
+//   index = (index + 1) % wallpapers.length;
+//   backgroundImg.value = wallpapers[index];
+//   setTimeout(() => changeBackground(), 500);
+// };
 
-onMounted(() => {
-  setTimeout(() => changeBackground(), 20000);
-});
+// onMounted(() => {
+//   setTimeout(() => changeBackground(), 500);
+// });
 </script>
 
 <template>
