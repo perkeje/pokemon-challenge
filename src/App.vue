@@ -54,7 +54,6 @@ onMounted(() => {
 
 <style scoped>
 .background-wrapper {
-  transition: background-image 0.5s ease-in;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
@@ -62,6 +61,7 @@ onMounted(() => {
   width: 100%;
   position: fixed;
   z-index: -1;
+  transition: background-image 0.5s ease-in;
 }
 
 .background-inner {

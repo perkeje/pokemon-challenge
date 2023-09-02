@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 import { ref } from "vue";
 import { setInterval } from "worker-timers";
 import { $axios } from "../modules/axios";
+import { usePokemonStore2 } from "@/stores";
 
 const cookies = new Cookies();
 
@@ -37,6 +38,7 @@ interface UserData {
 }
 
 export const useUserStore = defineStore("user", () => {
+  const pokemonStore = usePokemonStore2();
   const user = ref<UserData | undefined>(undefined);
   const isLoading = ref<boolean>(false);
   const confirmationEmail = ref<string | undefined>(undefined);
@@ -62,8 +64,11 @@ export const useUserStore = defineStore("user", () => {
           message: "Authentication successful",
           type: "success",
         });
+        await pokemonStore.getLastGuessed();
+        await pokemonStore.getPercentage();
         router.push({ path: "/" });
       })
+
       .catch((error) => {
         if (error?.response?.data?.cause === "Account not verified") {
           confirmationEmail.value = email;
@@ -130,6 +135,8 @@ export const useUserStore = defineStore("user", () => {
         sameSite: "strict",
       });
       user.value = response.data;
+      await pokemonStore.getLastGuessed();
+      await pokemonStore.getPercentage();
       return user.value;
     } catch (error: any) {
       $toast({

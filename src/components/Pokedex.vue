@@ -2,36 +2,25 @@
 import Pokemon from "@/components/Pokemon.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 import Loading from "@/components/Loading.vue";
-import { usePokemonStore } from "@/stores";
+import { usePokemonStore2 } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import Error from "@/components/Error.vue";
 
-const pokemonStore = usePokemonStore();
-const { isLoading, totalPages, pokedex, maxPokemons } =
-  storeToRefs(pokemonStore);
+const pokemonStore = usePokemonStore2();
+const { isLoading, pokedex, percentage, isError } = storeToRefs(pokemonStore);
+
 const currentPage = ref(1);
-const isError = ref(false);
-let pokemons = ref();
-let progress = ref(Math.floor((pokedex.value.size / maxPokemons.value) * 100));
+let progress = ref(Math.floor(percentage.value * 100));
 
 const changePage = async (page: number) => {
-  try {
-    isError.value = false;
-    pokemons.value = await pokemonStore.getPokemons(page);
-    currentPage.value = page;
-  } catch {
-    isError.value = true;
-  }
+  isError.value = false;
+  await pokemonStore.getPokedex(page);
+  currentPage.value = page;
 };
 
 onMounted(async () => {
-  try {
-    isError.value = false;
-    pokemons.value = await pokemonStore.getPokemons(currentPage.value);
-  } catch {
-    isError.value = true;
-  }
+  await pokemonStore.getPokedex(1);
 });
 </script>
 
@@ -49,14 +38,14 @@ onMounted(async () => {
       <div
         class="pokemon-holder"
         :class="{ load: isLoading }"
-        v-for="pokemon in pokemons"
+        v-for="pokemon in pokedex?.data"
       >
         <Pokemon
-          :pokemon-img="pokemon.img"
-          :display="pokemon.name === '???' ? false : true"
+          :pokemon-img="pokemon.pictureUrl"
+          :display="pokemon.name != undefined"
           v-if="!isLoading"
         />
-        <p v-if="!isLoading">{{ pokemon.name }}</p>
+        <p v-if="!isLoading">{{ pokemon.name ? pokemon.name : "???" }}</p>
       </div>
     </div>
 
@@ -68,7 +57,7 @@ onMounted(async () => {
         Prev
       </button>
       <button
-        v-for="page in totalPages"
+        v-for="page in pokedex?.lastPage"
         :key="page"
         :class="{ active_btn: currentPage === page }"
         @click="async () => await changePage(page)"
@@ -77,7 +66,7 @@ onMounted(async () => {
       </button>
       <button
         @click="async () => await changePage(++currentPage)"
-        :disabled="currentPage === totalPages"
+        :disabled="currentPage === pokedex?.lastPage"
       >
         Next
       </button>
@@ -130,7 +119,6 @@ onMounted(async () => {
 }
 
 .pokemon-holder {
-  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -50,6 +50,7 @@ const { pokedexModal } = storeToRefs(usePokemonStore());
   width: 80%;
   height: 80%;
   position: relative;
+  transition: background-color ease-out 0.3s;
 }
 
 .modal-close {

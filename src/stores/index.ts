@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 export * from "./userStore";
+export * from "./pokemonStore";
 
 type PokemonState = {
   maxPokemons: number;

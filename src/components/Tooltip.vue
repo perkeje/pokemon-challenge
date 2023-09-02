@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProgressBar from "./ProgressBar.vue";
-import { usePokemonStore } from "@/stores";
+import { usePokemonStore2 } from "@/stores";
 import { storeToRefs } from "pinia";
 
 const props = defineProps({
@@ -9,22 +9,19 @@ const props = defineProps({
     default: false,
   },
 });
-const pokemonStore = usePokemonStore();
-const { pokedex, pokemonPictureUrl } = storeToRefs(pokemonStore);
+const pokemonStore = usePokemonStore2();
+const { percentage, lastGuessed } = storeToRefs(pokemonStore);
 </script>
 
 <template>
   <div class="tooltip" v-show="props.isTooltipVisible">
-    <div class="display" v-if="pokedex.size > 0">
+    <div class="display" v-if="percentage > 0">
       <p>Lastly guessed</p>
       <div class="img-container">
-        <img
-          :src="pokemonPictureUrl + pokemonStore.getLastAdded + '.png'"
-          alt="Pokemon"
-        />
+        <img :src="lastGuessed?.pictureUrl" alt="Pokemon" />
       </div>
       <div class="progress-container">
-        <ProgressBar :progress="pokemonStore.progress"></ProgressBar>
+        <ProgressBar :progress="Math.floor(percentage * 100)"></ProgressBar>
       </div>
     </div>
     <div class="no-pokemons" v-else>

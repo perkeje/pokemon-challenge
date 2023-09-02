@@ -9,7 +9,7 @@ jsConfetti.addConfetti({
 
 <template>
   <div class="winning-content">
-    <p>You won!</p>
+    <p>Congratulations! <br />You became Pokemaster!</p>
     <div class="img-holder">
       <img src="src/assets/images/clipart1344213.png" alt="" />
     </div>
@@ -18,40 +18,38 @@ jsConfetti.addConfetti({
 
 <style scoped>
 .winning-content {
-  position: relative;
   height: 100%;
   color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .img-holder {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
   height: 70%;
   animation: slide-up 1.5s ease-out;
   animation-fill-mode: backwards;
 }
 
 .winning-content p {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: 250;
+  align-items: center;
+  text-align: center;
 }
 
 img {
-  height: 100%;
+  height: 350px;
 }
 
 @keyframes slide-up {
   0% {
-    transform: translateY(100%) translateX(-50%);
+    transform: translateY(100%);
   }
 
   100% {
-    transform: translateY(0) translateX(-50%);
+    transform: translateY(0);
   }
 }
 </style>

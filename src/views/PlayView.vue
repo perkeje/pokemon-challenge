@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePokemonStore } from "@/stores";
+import { usePokemonStore, usePokemonStore2 } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { Select, CloseBold } from "@element-plus/icons-vue";
@@ -14,7 +14,9 @@ const isError = ref(false);
 const isCorrect = ref(false);
 const randomPokemonImg = ref("");
 const pokemonStore = usePokemonStore();
+const pokemonStore2 = usePokemonStore2();
 const { pokemonPictureUrl, pokedex, maxPokemons } = storeToRefs(pokemonStore);
+const { randomPokemon } = storeToRefs(pokemonStore2);
 const pokemon = ref("");
 const isWin = ref(false);
 let id = 0;
@@ -114,8 +116,8 @@ onMounted(() => {
 
 .play-content {
   background-color: var(--secondary-color);
-  aspect-ratio: 1/1;
-  width: 90%;
+  /* height: 100%; */
+  width: 100%;
   max-width: 500px;
   border-radius: 25px;
   padding: 10px 0px;

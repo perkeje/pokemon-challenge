@@ -191,9 +191,9 @@ const passwordMismatch = computed(() => {
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  await formEl.validate((valid) => {
+  await formEl.validate(async (valid) => {
     if (valid) {
-      userStore.register(
+      await userStore.register(
         ruleForm.firstName,
         ruleForm.lastName,
         ruleForm.email,
