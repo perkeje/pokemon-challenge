@@ -6,7 +6,7 @@
     <p>Uh-oh! It looks like this page is as elusive as a wild Mew.</p>
     <p>
       Return to the
-      <router-link :to="{ name: 'home' }">Pokécenter</router-link> and start
+      <RouterLink :to="{ name: 'home' }">Pokécenter</RouterLink> and start
       your journey again.
     </p>
   </div>
@@ -26,7 +26,6 @@
   font-size: 1.8em;
   text-align: center;
   background-image: url("@/assets/images/surprised-pikachu.gif");
-  z-index: -1;
 }
 
 .not-found-container a {

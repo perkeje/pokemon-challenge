@@ -105,6 +105,7 @@ const navInnerStyle = computed(() => {
   transition:
     opacity ease-out 0.3s,
     background-color ease-out 0.3s;
+    z-index: 1;
 }
 
 .nav:hover {
