@@ -6,12 +6,12 @@ import Modal from "./components/Modal.vue";
 import Pokedex from "./components/Pokedex.vue";
 import ThemeButton from "./components/layouts/ThemeButton.vue";
 import AuthGuard from "./components/AuthGuard.vue";
-import wallpaper1 from "./assets/images/wallpaperbetter.jpg";
-import wallpaper2 from "./assets/images/wallpaperbetter1.jpg";
-import wallpaper3 from "./assets/images/wallpaperbetter2.jpg";
-import wallpaper4 from "./assets/images/wallpaperbetter3.jpg";
-import wallpaper5 from "./assets/images/wallpaperbetter4.jpg";
-import wallpaper6 from "./assets/images/wallpaperbetter5.jpg";
+import wallpaper1 from '@/assets/images/wallpaperbetter.jpg'
+import wallpaper2 from '@/assets/images/wallpaperbetter1.jpg';
+import wallpaper3 from '@/assets/images/wallpaperbetter2.jpg';
+import wallpaper4 from '@/assets/images/wallpaperbetter3.jpg';
+import wallpaper5 from '@/assets/images/wallpaperbetter4.jpg';
+import wallpaper6 from '@/assets/images/wallpaperbetter5.jpg';
 
 const wallpapers = [
   wallpaper1,

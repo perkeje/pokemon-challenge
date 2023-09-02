@@ -11,7 +11,7 @@ jsConfetti.addConfetti({
   <div class="winning-content">
     <p>Congratulations! <br />You became Pokemaster!</p>
     <div class="img-holder">
-      <img src="src/assets/images/clipart1344213.png" alt="" />
+      <img src="@/assets/images/clipart1344213.png" alt="" />
     </div>
   </div>
 </template>

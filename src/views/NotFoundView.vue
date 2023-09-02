@@ -25,7 +25,7 @@
   width: 100%;
   font-size: 1.8em;
   text-align: center;
-  background-image: url("src/assets/images/surprised-pikachu.gif");
+  background-image: url("@/assets/images/surprised-pikachu.gif");
   z-index: -1;
 }
 

@@ -8,7 +8,7 @@ import Pokeball from "@/components/Pokeball.vue";
       <div class="title-container">
         <img
           class="pokemon-title"
-          src="../assets/images/pokemon-text.png"
+          src="@/assets/images/pokemon-text.png"
           alt="Pokemon"
         />
       </div>
@@ -17,7 +17,7 @@ import Pokeball from "@/components/Pokeball.vue";
           <div class="ball_text">
             <img
               class="ball_text_img"
-              src="src/assets/images/pngaaa.com-1906169.png"
+              src="@/assets/images/pngaaa.com-1906169.png"
               alt="GUESS THAT POKEMON"
             />
           </div>

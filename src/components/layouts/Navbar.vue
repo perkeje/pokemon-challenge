@@ -10,7 +10,7 @@
         <RouterLink :to="{ name: 'home' }">
           <img
             class="pokeball-logo"
-            src="../../assets/images/logo.png"
+            src="@/assets/images/logo.png"
             alt="pokeball"
           />
         </RouterLink>
