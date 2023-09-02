@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 import { ref } from "vue";
 import { setInterval } from "worker-timers";
 import { $axios } from "../modules/axios";
-import { usePokemonStore2 } from "@/stores";
+import { usePokemonStore } from "@/stores";
 
 const cookies = new Cookies();
 
@@ -38,7 +38,7 @@ interface UserData {
 }
 
 export const useUserStore = defineStore("user", () => {
-  const pokemonStore = usePokemonStore2();
+  const pokemonStore = usePokemonStore();
   const user = ref<UserData | undefined>(undefined);
   const isLoading = ref<boolean>(false);
   const confirmationEmail = ref<string | undefined>(undefined);

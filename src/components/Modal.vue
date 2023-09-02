@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { usePokemonStore } from "@/stores";
+import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { Close } from "@element-plus/icons-vue";
 
-const { pokedexModal } = storeToRefs(usePokemonStore());
+const { pokedexModal } = storeToRefs(useAppStore());
 </script>
 
 <template>

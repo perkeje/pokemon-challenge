@@ -20,7 +20,7 @@ interface Pokedex {
   lastPage: number;
   data: Array<TruePokemon>;
 }
-export const usePokemonStore2 = defineStore("pokemon2", () => {
+export const usePokemonStore = defineStore("pokemon", () => {
   const randomPokemon = ref<RandomPokemon | undefined>(undefined);
   const truePokemon = ref<TruePokemon | undefined>(undefined);
   const lastGuessed = ref<TruePokemon | undefined>(undefined);

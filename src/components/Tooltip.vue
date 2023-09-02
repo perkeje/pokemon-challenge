@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProgressBar from "./ProgressBar.vue";
-import { usePokemonStore2 } from "@/stores";
+import { usePokemonStore } from "@/stores";
 import { storeToRefs } from "pinia";
 
 const props = defineProps({
@@ -9,7 +9,7 @@ const props = defineProps({
     default: false,
   },
 });
-const pokemonStore = usePokemonStore2();
+const pokemonStore = usePokemonStore();
 const { percentage, lastGuessed } = storeToRefs(pokemonStore);
 </script>
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Sunny, Moon } from "@element-plus/icons-vue";
-import { usePokemonStore } from "@/stores";
+import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, watch } from "vue";
 
-const { theme } = storeToRefs(usePokemonStore());
+const { theme } = storeToRefs(useAppStore());
 
 const changeTheme = () => {
   if (theme.value === "light") theme.value = "dark";

@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { Burger } from "@element-plus/icons-vue";
 import Tooltip from "../Tooltip.vue";
-import { usePokemonStore, useUserStore } from "@/stores";
+import { useAppStore, useUserStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { computed, ref, watchEffect } from "vue";
 import {
@@ -56,11 +56,11 @@ import {
 const isMenuOpen = ref(false);
 const isTooltipVisible = ref(false);
 const router = useRouter();
-const pokemonStore = usePokemonStore();
+const appStore = useAppStore();
 const userStore = useUserStore();
 
 const { user } = storeToRefs(userStore);
-const { pokedexModal } = storeToRefs(pokemonStore);
+const { pokedexModal } = storeToRefs(appStore);
 
 const logout = async () => {
   await userStore.logout();

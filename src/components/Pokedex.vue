@@ -2,12 +2,12 @@
 import Pokemon from "@/components/Pokemon.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 import Loading from "@/components/Loading.vue";
-import { usePokemonStore2 } from "@/stores";
+import { usePokemonStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import Error from "@/components/Error.vue";
 
-const pokemonStore = usePokemonStore2();
+const pokemonStore = usePokemonStore();
 const { isLoading, pokedex, percentage, isError } = storeToRefs(pokemonStore);
 
 const currentPage = ref(1);

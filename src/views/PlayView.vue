@@ -1,61 +1,75 @@
 <script setup lang="ts">
-import { usePokemonStore, usePokemonStore2 } from "@/stores";
+import { usePokemonStore } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { Select, CloseBold } from "@element-plus/icons-vue";
-import Toast from "@/components/Toast.vue";
 import Winning from "@/components/Winning.vue";
 import Pokemon from "@/components/Pokemon.vue";
-import Error from "@/components/Error.vue";
+import type { FormInstance, FormRules } from "element-plus";
+import { ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
+import { $toast } from "@/logic/notification";
 
 const isGuessed = ref(false);
-const userGuess = ref("");
-const isError = ref(false);
 const isCorrect = ref(false);
-const randomPokemonImg = ref("");
-const pokemonStore = usePokemonStore();
-const pokemonStore2 = usePokemonStore2();
-const { pokemonPictureUrl, pokedex, maxPokemons } = storeToRefs(pokemonStore);
-const { randomPokemon } = storeToRefs(pokemonStore2);
-const pokemon = ref("");
-const isWin = ref(false);
-let id = 0;
+const pokemonStore2 = usePokemonStore();
+const { randomPokemon, truePokemon, lastGuessed, percentage } =
+  storeToRefs(pokemonStore2);
+const isWin = ref(percentage.value == 1);
 
-const newPokemon = () => {
-  isError.value = false;
-  if (checkPokedex()) return;
-  isGuessed.value = false;
-  id = pokemonStore.getRandomPokemonId();
-  randomPokemonImg.value = `${pokemonPictureUrl.value}${id}.png`;
-};
-const checkPokedex = () => {
-  if (pokedex.value.size >= maxPokemons.value) isWin.value = true;
-  return isWin.value;
-};
-const guess = async () => {
-  if (userGuess.value === "") {
-    alert("You have to enter Pokemon name");
+const guessFormRef = ref<FormInstance>();
+
+const guessForm = reactive({
+  userGuess: "",
+});
+const rules = ref<FormRules>({
+  userGuess: [
+    {
+      required: true,
+      message: "You have to guess something!",
+      trigger: "blur",
+    },
+  ],
+});
+const newPokemon = async () => {
+  if (percentage.value == 1) {
+    isWin.value = true;
     return;
   }
-  if (!isGuessed) return;
-  try {
-    pokemon.value = await pokemonStore.getPokemonName(id);
+  guessForm.userGuess = "";
+  await pokemonStore2.fetchRandomPokemon();
+  isGuessed.value = false;
+};
 
-    isGuessed.value = !isGuessed.value;
-
-    if (pokemon?.value != undefined) {
-      if (pokemon?.value === userGuess.value.toLowerCase()) {
-        isCorrect.value = true;
-        pokemonStore.storeToPokedex(id);
-      } else {
-        isCorrect.value = false;
+const guess = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate(async (valid) => {
+    if (valid) {
+      await pokemonStore2.guessPokemon(
+        randomPokemon.value!.id,
+        guessForm.userGuess,
+      );
+      isCorrect.value =
+        truePokemon.value?.name === guessForm.userGuess.toLocaleLowerCase();
+      isGuessed.value = true;
+      const pokemonName = truePokemon.value?.name;
+      if (isCorrect.value && pokemonName) {
+        await pokemonStore2.getPercentage();
+        lastGuessed.value = truePokemon.value;
+        setTimeout(() => {
+          const capitalizedPokemonName =
+            pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
+          $toast({
+            title: "Pokedex",
+            message: capitalizedPokemonName + " is added to pokedex",
+            type: "success",
+            duration: "short",
+          });
+        }, 700);
       }
     }
-    userGuess.value = "";
-  } catch {
-    isError.value = true;
-  }
+  });
 };
+
 onMounted(() => {
   newPokemon();
 });
@@ -63,52 +77,73 @@ onMounted(() => {
 
 <template>
   <div class="play-wrapper">
-    <div class="play-content">
-      <Toast
-        v-if="isCorrect && !isGuessed"
-        title="Correct!"
-        :message="pokemon.toUpperCase() + ' added to Pokedex'"
-        :duration="3000"
-      />
-      <label for="guess-input" v-if="!isWin && !isError">
+    <el-card class="play-content">
+      <label for="guess-input" v-if="!isWin">
         <div class="play-container">
-          <Pokemon :display="isGuessed" :pokemon-img="randomPokemonImg" />
-          <div class="guess" v-if="!isGuessed">
-            <input
-              class="guess-input"
-              id="guess-input"
-              type="text"
-              @keydown.enter="guess"
-              v-model="userGuess"
-              placeholder="Who's that pokemon?"
-            />
-            <button class="guess-btn" @click="guess">Guess</button>
-          </div>
+          <Pokemon
+            :display="isGuessed"
+            :pokemon-img="randomPokemon?.pictureUrl"
+          />
+          <el-form
+            class="guess"
+            v-if="!isGuessed"
+            ref="guessFormRef"
+            :rules="rules"
+            :model="guessForm"
+            @submit.prevent
+          >
+            <el-form-item prop="userGuess" class="guess-item" size="large">
+              <el-input
+                class="guess-input"
+                v-model="guessForm.userGuess"
+                autofocus
+                placeholder="Who's that pokemon?"
+                @keyup.enter="guess(guessFormRef)"
+                size="large"
+              />
+            </el-form-item>
+            <el-button
+              class="guess-btn"
+              type="primary"
+              @click="guess(guessFormRef)"
+              :loading="pokemonStore2.isLoading"
+              size="large"
+            >
+              Guess
+            </el-button>
+          </el-form>
           <div class="next" v-if="isGuessed">
             <div class="pokemon-text">
-              <p>{{ pokemon }}</p>
+              <p>{{ truePokemon?.name }}</p>
               <el-icon :size="40">
                 <CloseBold v-if="!isCorrect" style="color: var(--error)" />
                 <Select v-if="isCorrect" style="color: var(--success)" />
               </el-icon>
             </div>
-            <button class="next-btn" @click="newPokemon">Next</button>
+            <el-button
+              class="next-btn"
+              type="primary"
+              @click="newPokemon"
+              :loading="pokemonStore2.isLoading"
+              size="large"
+            >
+              Next
+            </el-button>
           </div>
         </div>
       </label>
-      <div class="winning-container" v-if="isWin && !isError">
+      <div class="winning-container" v-if="isWin">
         <Winning />
       </div>
-      <div class="error-container" v-if="!isWin && isError">
-        <Error :handle-click="newPokemon" />
-      </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
 <style scoped>
 .play-wrapper {
-  height: 100vh;
+  position: absolute;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,12 +151,12 @@ onMounted(() => {
 
 .play-content {
   background-color: var(--secondary-color);
-  /* height: 100%; */
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   border-radius: 25px;
   padding: 10px 0px;
   transition: background-color ease-out 0.3s;
+  border-style: hidden;
 }
 
 .play-container {
@@ -135,30 +170,34 @@ onMounted(() => {
 
 .guess,
 .next {
-  height: 30%;
-  width: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   color: var(--primary-color);
+}
+
+.guess-item {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .pokemon-text p {
   animation: grow 0.8s ease-in;
   overflow: hidden;
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: 300;
   text-transform: capitalize;
   text-align: center;
-  height: 100%;
 }
 
 .pokemon-text {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30%;
 }
 
 .el-icon {
@@ -180,31 +219,29 @@ onMounted(() => {
 }
 
 .guess-input {
-  height: 30%;
-  width: 40%;
-  border-color: var(--primary-color);
-  border-radius: 15px;
-  border-width: 0.5px;
+  height: 100%;
   font-size: 1.3em;
   text-align: center;
-}
-
-.guess-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  border-width: 1.5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .next-btn,
 .guess-btn {
-  height: 30%;
-  width: 30%;
-  border-radius: 15px;
+  width: 80%;
   cursor: pointer;
-  border-width: 0.5px;
+  border: none;
   background-color: var(--primary-color);
   color: var(--secondary-color);
-  font-size: 1.3em;
+  font-size: 1.2em;
+  transition: background-color 0.3s;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.next-btn:hover,
+.guess-btn:hover {
+  background-color: #888888;
 }
 
 .winning-container {
